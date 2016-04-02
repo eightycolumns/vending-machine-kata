@@ -73,5 +73,13 @@ describe('Vending machine', function () {
         expect(cola.getCostInDollars()).toBe(1);
       });
     });
+
+    describe('Chips', function () {
+      var chips = Chips.create();
+
+      it('cost $0.50', function () {
+        expect(chips.getCostInDollars()).toBe(0.5);
+      });
+    });
   });
 });
