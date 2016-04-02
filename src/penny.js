@@ -2,6 +2,7 @@ var Penny = (function () {
   function create() {
     var weightInGrams = 2.5;
     var diameterInMillimeters = 19.05;
+    var thicknessInMillimeters = 1.52;
 
     function getWeightInGrams() {
       return weightInGrams;
@@ -11,9 +12,14 @@ var Penny = (function () {
       return diameterInMillimeters;
     }
 
+    function getThicknessInMillimeters() {
+      return thicknessInMillimeters;
+    }
+
     return deepFreeze({
       getWeightInGrams: getWeightInGrams,
-      getDiameterInMillimeters: getDiameterInMillimeters
+      getDiameterInMillimeters: getDiameterInMillimeters,
+      getThicknessInMillimeters: getThicknessInMillimeters
     });
   }
 
