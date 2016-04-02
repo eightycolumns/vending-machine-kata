@@ -47,5 +47,13 @@ describe('Vending machine', function () {
         expect(dime.getThicknessInMillimeters()).toBe(1.35);
       });
     });
+
+    describe('A quarter', function () {
+      var quarter = Quarter.create();
+
+      it('weighs 5.67 g', function () {
+        expect(quarter.getWeightInGrams()).toBe(5.67);
+      });
+    });
   });
 });
