@@ -54,6 +54,10 @@ describe('Vending machine', function () {
       it('weighs 5.67 g', function () {
         expect(quarter.getWeightInGrams()).toBe(5.67);
       });
+
+      it('is 24.26 mm in diameter', function () {
+        expect(quarter.getDiameterInMillimeters()).toBe(24.26);
+      });
     });
   });
 });
