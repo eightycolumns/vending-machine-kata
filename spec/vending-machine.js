@@ -25,5 +25,9 @@ describe('Vending machine', function () {
     it('is 21.21 mm in diameter', function () {
       expect(nickel.getDiameterInMillimeters()).toBe(21.21);
     });
+
+    it('is 1.95 mm thick', function () {
+      expect(nickel.getThicknessInMillimeters()).toBe(1.95);
+    });
   });
 });
