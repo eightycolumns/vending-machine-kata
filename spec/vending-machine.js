@@ -42,6 +42,10 @@ describe('Vending machine', function () {
       it('is 17.91 mm in diameter', function () {
         expect(dime.getDiameterInMillimeters()).toBe(17.91);
       });
+
+      it('is 1.35 mm thick', function () {
+        expect(dime.getThicknessInMillimeters()).toBe(1.35);
+      });
     });
   });
 });
