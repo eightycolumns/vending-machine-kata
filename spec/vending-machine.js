@@ -81,5 +81,13 @@ describe('Vending machine', function () {
         expect(chips.getCostInDollars()).toBe(0.5);
       });
     });
+
+    describe('Candy', function () {
+      var candy = Candy.create();
+
+      it('costs $0.65', function () {
+        expect(candy.getCostInDollars()).toBe(0.65);
+      });
+    });
   });
 });
