@@ -38,6 +38,10 @@ describe('Vending machine', function () {
       it('weighs 2.268 g', function () {
         expect(dime.getWeightInGrams()).toBe(2.268);
       });
+
+      it('is 17.91 mm in diameter', function () {
+        expect(dime.getDiameterInMillimeters()).toBe(17.91);
+      });
     });
   });
 });
