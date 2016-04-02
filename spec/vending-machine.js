@@ -58,6 +58,10 @@ describe('Vending machine', function () {
       it('is 24.26 mm in diameter', function () {
         expect(quarter.getDiameterInMillimeters()).toBe(24.26);
       });
+
+      it('is 1.75 mm thick', function () {
+        expect(quarter.getThicknessInMillimeters()).toBe(1.75);
+      });
     });
   });
 });
