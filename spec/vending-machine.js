@@ -21,5 +21,9 @@ describe('Vending machine', function () {
     it('weighs 5 g', function () {
       expect(nickel.getWeightInGrams()).toBe(5);
     });
+
+    it('is 21.21 mm in diameter', function () {
+      expect(nickel.getDiameterInMillimeters()).toBe(21.21);
+    });
   });
 });
