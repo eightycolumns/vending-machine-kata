@@ -14,4 +14,12 @@ describe('Vending machine', function () {
       expect(penny.getThicknessInMillimeters()).toBe(1.52);
     });
   });
+
+  describe('A nickel', function () {
+    var nickel = Nickel.create();
+
+    it('weighs 5 g', function () {
+      expect(nickel.getWeightInGrams()).toBe(5);
+    });
+  });
 });
