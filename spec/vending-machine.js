@@ -31,5 +31,13 @@ describe('Vending machine', function () {
         expect(nickel.getThicknessInMillimeters()).toBe(1.95);
       });
     });
+
+    describe('A dime', function () {
+      var dime = Dime.create();
+
+      it('weighs 2.268 g', function () {
+        expect(dime.getWeightInGrams()).toBe(2.268);
+      });
+    });
   });
 });
