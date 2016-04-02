@@ -64,4 +64,14 @@ describe('Vending machine', function () {
       });
     });
   });
+
+  describe('Products', function () {
+    describe('Cola', function () {
+      var cola = Cola.create();
+
+      it('costs $1.00', function () {
+        expect(cola.getCostInDollars()).toBe(1);
+      });
+    });
+  });
 });
