@@ -101,4 +101,13 @@ describe('The vending machine', function () {
 
     expect(newNickelCount).toBe(originalNickelCount + 1);
   });
+
+  it('accepts dimes', function () {
+    var originalDimeCount = vendingMachine.getDimeCount();
+    var dime = Dime.create();
+    vendingMachine.onCoinInserted(dime);
+    var newDimeCount = vendingMachine.getDimeCount();
+
+    expect(newDimeCount).toBe(originalDimeCount + 1);
+  });
 });
