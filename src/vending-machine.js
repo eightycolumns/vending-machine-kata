@@ -1,8 +1,9 @@
 var VendingMachine = (function () {
   function create() {
-    var dollarsInserted = 0;
     var coinReturn = CoinReturn.create();
     var coinsOnHand = [];
+    var displayText = 'INSERT COINS';
+    var dollarsInserted = 0;
 
     function coinIsDime(coin) {
       var dime = Dime.create();
@@ -70,10 +71,17 @@ var VendingMachine = (function () {
     }
 
     function getDisplayText() {
-      if (dollarsInserted === 0) {
-        return 'INSERT COIN';
-      } else {
-        return '$' + dollarsInserted.toFixed(2);
+      return displayText;
+    }
+
+    function onButtonPressed(button) {
+      if (button === 'Cola') {
+        var cola = Cola.create();
+        var costInDollars = cola.getCostInDollars();
+
+        if (costInDollars <= dollarsInserted) {
+          displayText = 'THANK YOU';
+        }
       }
     }
 
@@ -90,6 +98,10 @@ var VendingMachine = (function () {
       } else {
         rejectCoin(coin);
       }
+
+      if (dollarsInserted > 0) {
+        displayText = '$' + dollarsInserted.toFixed(2);
+      }
     }
 
     function rejectCoin(coin) {
@@ -103,6 +115,7 @@ var VendingMachine = (function () {
       getCoinReturnContents: getCoinReturnContents,
       getCoinsOnHand: getCoinsOnHand,
       getDisplayText: getDisplayText,
+      onButtonPressed: onButtonPressed,
       onCoinInserted: onCoinInserted
     });
   }

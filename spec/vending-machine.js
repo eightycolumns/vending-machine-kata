@@ -130,9 +130,9 @@ describe('The vending machine', function () {
   });
 
   describe('has a display', function () {
-    it('that reads "INSERT COIN" when no coins have been inserted', function () {
+    it('that reads "INSERT COINS" when no coins have been inserted', function () {
       var displayText = vendingMachine.getDisplayText();
-      expect(displayText).toBe('INSERT COIN');
+      expect(displayText).toBe('INSERT COINS');
     });
 
     it('that reads "$0.05" when a nickel is inserted', function () {
@@ -151,17 +151,41 @@ describe('The vending machine', function () {
       expect(displayText).toBe('$0.10');
     });
 
-    it('that displays the total amount inserted', function () {
-      (function insertFourQuarters() {
-        for (var i = 0; i < 4; i += 1) {
-          var quarter = Quarter.create();
-          vendingMachine.onCoinInserted(quarter);
-        }
-      })();
+    it('that shows the total amount inserted', function () {
+      var quarter1 = Quarter.create();
+      vendingMachine.onCoinInserted(quarter1);
+
+      var quarter2 = Quarter.create();
+      vendingMachine.onCoinInserted(quarter2);
+
+      var quarter3 = Quarter.create();
+      vendingMachine.onCoinInserted(quarter3);
+
+      var quarter4 = Quarter.create();
+      vendingMachine.onCoinInserted(quarter4);
 
       var displayText = vendingMachine.getDisplayText();
 
       expect(displayText).toBe('$1.00');
+    });
+
+    it('that says "THANK YOU" when an item is purchased', function () {
+      var quarter1 = Quarter.create();
+      vendingMachine.onCoinInserted(quarter1);
+
+      var quarter2 = Quarter.create();
+      vendingMachine.onCoinInserted(quarter2);
+
+      var quarter3 = Quarter.create();
+      vendingMachine.onCoinInserted(quarter3);
+
+      var quarter4 = Quarter.create();
+      vendingMachine.onCoinInserted(quarter4);
+
+      vendingMachine.onButtonPressed('Cola');
+      var displayText = vendingMachine.getDisplayText();
+
+      expect(displayText).toBe('THANK YOU');
     });
   });
 });
