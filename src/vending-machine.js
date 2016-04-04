@@ -73,7 +73,7 @@ var VendingMachine = (function () {
       if (dollarsInserted === 0) {
         return 'INSERT COIN';
       } else {
-        return '$' + dollarsInserted;
+        return '$' + dollarsInserted.toFixed(2);
       }
     }
 

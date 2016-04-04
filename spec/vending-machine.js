@@ -142,5 +142,13 @@ describe('The vending machine', function () {
 
       expect(displayText).toBe('$0.05');
     });
+
+    it('that reads "$0.10" when a dime is inserted', function () {
+      var dime = Dime.create();
+      vendingMachine.onCoinInserted(dime);
+      var displayText = vendingMachine.getDisplayText();
+
+      expect(displayText).toBe('$0.10');
+    });
   });
 });
