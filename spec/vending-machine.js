@@ -124,4 +124,11 @@ describe('The vending machine', function () {
 
     expect(coinReturnContents).toContain(penny);
   });
+
+  describe('has a display', function () {
+    it('that reads "INSERT COIN" when no coins have been inserted', function () {
+      var displayText = vendingMachine.getDisplayText();
+      expect(displayText).toBe('INSERT COIN');
+    });
+  });
 });

@@ -2,6 +2,7 @@ var VendingMachine = (function () {
   function create() {
     var coinReturn = CoinReturn.create();
     var coinsOnHand = [];
+    var displayText = 'INSERT COIN';
 
     function coinIsDime(coin) {
       var dime = Dime.create();
@@ -68,6 +69,10 @@ var VendingMachine = (function () {
       return coinsOnHand;
     }
 
+    function getDisplayText() {
+      return displayText;
+    }
+
     function onCoinInserted(coin) {
       if (coinIsNickel(coin)) {
         coinsOnHand.push(coin);
@@ -90,6 +95,7 @@ var VendingMachine = (function () {
       coinReturn: coinReturn,
       getCoinReturnContents: getCoinReturnContents,
       getCoinsOnHand: getCoinsOnHand,
+      getDisplayText: getDisplayText,
       onCoinInserted: onCoinInserted
     });
   }
