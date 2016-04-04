@@ -91,7 +91,11 @@ describe('Products', function () {
 });
 
 describe('The vending machine', function () {
-  var vendingMachine = VendingMachine.create();
+  var vendingMachine = undefined;
+
+  beforeEach(function () {
+    vendingMachine = VendingMachine.create();
+  });
 
   it('accepts nickels', function () {
     var nickel = Nickel.create();
@@ -129,6 +133,14 @@ describe('The vending machine', function () {
     it('that reads "INSERT COIN" when no coins have been inserted', function () {
       var displayText = vendingMachine.getDisplayText();
       expect(displayText).toBe('INSERT COIN');
+    });
+
+    it('that reads "$0.05" when a nickel is inserted', function () {
+      var nickel = Nickel.create();
+      vendingMachine.onCoinInserted(nickel);
+      var displayText = vendingMachine.getDisplayText();
+
+      expect(displayText).toBe('$0.05');
     });
   });
 });
