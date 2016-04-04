@@ -1,5 +1,6 @@
 var VendingMachine = (function () {
   function create() {
+    var coinReturnContents = [];
     var dimeCount = 0;
     var nickelCount = 0;
     var quarterCount = 0;
@@ -61,6 +62,10 @@ var VendingMachine = (function () {
       );
     }
 
+    function getCoinReturnContents() {
+      return coinReturnContents;
+    }
+
     function getDimeCount() {
       return dimeCount;
     }
@@ -80,10 +85,17 @@ var VendingMachine = (function () {
         dimeCount += 1;
       } else if (coinIsQuarter(coin)) {
         quarterCount += 1;
+      } else {
+        rejectCoin(coin);
       }
     }
 
+    function rejectCoin(coin) {
+      coinReturnContents.push(coin);
+    }
+
     return deepFreeze({
+      getCoinReturnContents: getCoinReturnContents,
       getDimeCount: getDimeCount,
       getNickelCount: getNickelCount,
       getQuarterCount: getQuarterCount,

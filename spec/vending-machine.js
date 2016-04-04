@@ -119,4 +119,12 @@ describe('The vending machine', function () {
 
     expect(newQuarterCount).toBe(originalQuarterCount + 1);
   });
+
+  it('rejects pennies', function () {
+    var penny = Penny.create();
+    vendingMachine.onCoinInserted(penny);
+    var coinReturnContents = vendingMachine.getCoinReturnContents();
+
+    expect(coinReturnContents).toContain(penny);
+  });
 });
