@@ -110,4 +110,13 @@ describe('The vending machine', function () {
 
     expect(newDimeCount).toBe(originalDimeCount + 1);
   });
+
+  it('accepts quarters', function () {
+    var originalQuarterCount = vendingMachine.getQuarterCount();
+    var quarter = Quarter.create();
+    vendingMachine.onCoinInserted(quarter);
+    var newQuarterCount = vendingMachine.getQuarterCount();
+
+    expect(newQuarterCount).toBe(originalQuarterCount + 1);
+  });
 });
