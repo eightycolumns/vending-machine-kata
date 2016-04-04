@@ -94,30 +94,27 @@ describe('The vending machine', function () {
   var vendingMachine = VendingMachine.create();
 
   it('accepts nickels', function () {
-    var originalNickelCount = vendingMachine.getNickelCount();
     var nickel = Nickel.create();
     vendingMachine.onCoinInserted(nickel);
-    var newNickelCount = vendingMachine.getNickelCount();
+    var coinsInVendingMachine = vendingMachine.getCoinsOnHand();
 
-    expect(newNickelCount).toBe(originalNickelCount + 1);
+    expect(coinsInVendingMachine).toContain(nickel);
   });
 
   it('accepts dimes', function () {
-    var originalDimeCount = vendingMachine.getDimeCount();
     var dime = Dime.create();
     vendingMachine.onCoinInserted(dime);
-    var newDimeCount = vendingMachine.getDimeCount();
+    var coinsInVendingMachine = vendingMachine.getCoinsOnHand();
 
-    expect(newDimeCount).toBe(originalDimeCount + 1);
+    expect(coinsInVendingMachine).toContain(dime);
   });
 
   it('accepts quarters', function () {
-    var originalQuarterCount = vendingMachine.getQuarterCount();
     var quarter = Quarter.create();
     vendingMachine.onCoinInserted(quarter);
-    var newQuarterCount = vendingMachine.getQuarterCount();
+    var coinsInVendingMachine = vendingMachine.getCoinsOnHand();
 
-    expect(newQuarterCount).toBe(originalQuarterCount + 1);
+    expect(coinsInVendingMachine).toContain(quarter);
   });
 
   it('rejects pennies', function () {
