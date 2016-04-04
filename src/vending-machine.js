@@ -1,6 +1,6 @@
 var VendingMachine = (function () {
   function create() {
-    var coinReturnContents = [];
+    var coinReturn = CoinReturn.create();
     var coinsOnHand = [];
 
     function coinIsDime(coin) {
@@ -61,7 +61,7 @@ var VendingMachine = (function () {
     }
 
     function getCoinReturnContents() {
-      return coinReturnContents;
+      return coinReturn.getContents();
     }
 
     function getCoinsOnHand() {
@@ -81,10 +81,13 @@ var VendingMachine = (function () {
     }
 
     function rejectCoin(coin) {
+      var coinReturnContents = coinReturn.getContents();
       coinReturnContents.push(coin);
+      coinReturn.setContents(coinReturnContents);
     }
 
     return deepFreeze({
+      coinReturn: coinReturn,
       getCoinReturnContents: getCoinReturnContents,
       getCoinsOnHand: getCoinsOnHand,
       onCoinInserted: onCoinInserted
