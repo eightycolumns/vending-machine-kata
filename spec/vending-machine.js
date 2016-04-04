@@ -169,6 +169,16 @@ describe('The vending machine', function () {
       expect(displayText).toBe('$1.00');
     });
 
+    it('that shows the price when a button is pressed before enough money has been inserted', function () {
+      var quarter = Quarter.create();
+      vendingMachine.onCoinInserted(quarter);
+
+      vendingMachine.onButtonPressed('Cola');
+      var displayText = vendingMachine.getDisplayText();
+
+      expect(displayText).toBe('PRICE: $1.00');
+    });
+
     it('that says "THANK YOU" when an item is purchased', function () {
       var quarter1 = Quarter.create();
       vendingMachine.onCoinInserted(quarter1);

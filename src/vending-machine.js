@@ -81,6 +81,8 @@ var VendingMachine = (function () {
 
         if (costInDollars <= dollarsInserted) {
           displayText = 'THANK YOU';
+        } else {
+          displayText = 'PRICE: $' + costInDollars.toFixed(2);
         }
       }
     }
