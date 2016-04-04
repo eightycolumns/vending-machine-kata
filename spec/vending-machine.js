@@ -150,5 +150,18 @@ describe('The vending machine', function () {
 
       expect(displayText).toBe('$0.10');
     });
+
+    it('that displays the total amount inserted', function () {
+      (function insertFourQuarters() {
+        for (var i = 0; i < 4; i += 1) {
+          var quarter = Quarter.create();
+          vendingMachine.onCoinInserted(quarter);
+        }
+      })();
+
+      var displayText = vendingMachine.getDisplayText();
+
+      expect(displayText).toBe('$1.00');
+    });
   });
 });
