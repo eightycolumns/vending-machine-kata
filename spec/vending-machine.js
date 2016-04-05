@@ -129,6 +129,33 @@ describe('The vending machine', function () {
     expect(coinReturnContents).toContain(penny);
   });
 
+  it('dispenses cola when cola is purchased', function () {
+    var quarter1 = Quarter.create();
+    vendingMachine.onCoinInserted(quarter1);
+
+    var quarter2 = Quarter.create();
+    vendingMachine.onCoinInserted(quarter2);
+
+    var quarter3 = Quarter.create();
+    vendingMachine.onCoinInserted(quarter3);
+
+    var quarter4 = Quarter.create();
+    vendingMachine.onCoinInserted(quarter4);
+
+    vendingMachine.onButtonPressed('Cola');
+    var outputBinContents = vendingMachine.outputBin.getContents();
+
+    var outputBinContainsCola = outputBinContents.some(function (product) {
+      var cola = Cola.create();
+      cola = JSON.stringify(cola);
+      product = JSON.stringify(product);
+
+      return product === cola;
+    });
+
+    expect(outputBinContainsCola).toBe(true);
+  });
+
   describe('has a display', function () {
     it('that reads "INSERT COINS" when no coins have been inserted', function () {
       var displayText = vendingMachine.getDisplayText();

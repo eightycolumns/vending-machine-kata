@@ -4,6 +4,7 @@ var VendingMachine = (function () {
     var coinsOnHand = [];
     var displayText = 'INSERT COINS';
     var dollarsInserted = 0;
+    var outputBin = OutputBin.create();
 
     function coinIsDime(coin) {
       var dime = Dime.create();
@@ -62,6 +63,12 @@ var VendingMachine = (function () {
       );
     }
 
+    function dispenseProduct(product) {
+      var outputBinContents = outputBin.getContents();
+      outputBinContents.push(product);
+      outputBin.setContents(outputBinContents);
+    }
+
     function getCoinReturnContents() {
       return coinReturn.getContents();
     }
@@ -80,6 +87,7 @@ var VendingMachine = (function () {
         var costInDollars = cola.getCostInDollars();
 
         if (costInDollars <= dollarsInserted) {
+          dispenseProduct(cola);
           displayText = 'THANK YOU';
         } else {
           displayText = 'PRICE: $' + costInDollars.toFixed(2);
@@ -114,11 +122,13 @@ var VendingMachine = (function () {
 
     return deepFreeze({
       coinReturn: coinReturn,
+      dispenseProduct: dispenseProduct,
       getCoinReturnContents: getCoinReturnContents,
       getCoinsOnHand: getCoinsOnHand,
       getDisplayText: getDisplayText,
       onButtonPressed: onButtonPressed,
-      onCoinInserted: onCoinInserted
+      onCoinInserted: onCoinInserted,
+      outputBin: outputBin
     });
   }
 
