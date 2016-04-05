@@ -9,57 +9,57 @@ var VendingMachine = (function () {
     function coinIsDime(coin) {
       var dime = Dime.create();
 
-      var actualWeight = coin.getWeightInGrams();
-      var expectedWeight = dime.getWeightInGrams();
+      var coinWeightInGrams = coin.getWeightInGrams();
+      var dimeWeightInGrams = dime.getWeightInGrams();
 
-      var actualDiameter = coin.getDiameterInMillimeters();
-      var expectedDiameter = dime.getDiameterInMillimeters();
+      var coinDiameterInMillimeters = coin.getDiameterInMillimeters();
+      var dimeDiameterInMillimeters = dime.getDiameterInMillimeters();
 
-      var actualThickness = coin.getThicknessInMillimeters();
-      var expectedThickness = dime.getThicknessInMillimeters();
+      var coinThicknessInMillimeters = coin.getThicknessInMillimeters();
+      var dimeThicknessInMillimeters = dime.getThicknessInMillimeters();
 
       return (
-        actualWeight === expectedWeight &&
-        actualDiameter === expectedDiameter &&
-        actualThickness === expectedThickness
+        coinWeightInGrams === dimeWeightInGrams &&
+        coinDiameterInMillimeters === dimeDiameterInMillimeters &&
+        coinThicknessInMillimeters === dimeThicknessInMillimeters
       );
     }
 
     function coinIsNickel(coin) {
       var nickel = Nickel.create();
 
-      var actualWeight = coin.getWeightInGrams();
-      var expectedWeight = nickel.getWeightInGrams();
+      var coinWeightInGrams = coin.getWeightInGrams();
+      var nickelWeightInGrams = nickel.getWeightInGrams();
 
-      var actualDiameter = coin.getDiameterInMillimeters();
-      var expectedDiameter = nickel.getDiameterInMillimeters();
+      var coinDiameterInMillimeters = coin.getDiameterInMillimeters();
+      var nickelDiameterInMillimeters = nickel.getDiameterInMillimeters();
 
-      var actualThickness = coin.getThicknessInMillimeters();
-      var expectedThickness = nickel.getThicknessInMillimeters();
+      var coinThicknessInMillimeters = coin.getThicknessInMillimeters();
+      var nickelThicknessInMillimeters = nickel.getThicknessInMillimeters();
 
       return (
-        actualWeight === expectedWeight &&
-        actualDiameter === expectedDiameter &&
-        actualThickness === expectedThickness
+        coinWeightInGrams === nickelWeightInGrams &&
+        coinDiameterInMillimeters === nickelDiameterInMillimeters &&
+        coinThicknessInMillimeters === nickelThicknessInMillimeters
       );
     }
 
     function coinIsQuarter(coin) {
       var quarter = Quarter.create();
 
-      var actualWeight = coin.getWeightInGrams();
-      var expectedWeight = quarter.getWeightInGrams();
+      var coinWeightInGrams = coin.getWeightInGrams();
+      var quarterWeightInGrams = quarter.getWeightInGrams();
 
-      var actualDiameter = coin.getDiameterInMillimeters();
-      var expectedDiameter = quarter.getDiameterInMillimeters();
+      var coinDiameterInMillimeters = coin.getDiameterInMillimeters();
+      var quarterDiameterInMillimeters = quarter.getDiameterInMillimeters();
 
-      var actualThickness = coin.getThicknessInMillimeters();
-      var expectedThickness = quarter.getThicknessInMillimeters();
+      var coinThicknessInMillimeters = coin.getThicknessInMillimeters();
+      var quarterThicknessInMillimeters = quarter.getThicknessInMillimeters();
 
       return (
-        actualWeight === expectedWeight &&
-        actualDiameter === expectedDiameter &&
-        actualThickness === expectedThickness
+        coinWeightInGrams === quarterWeightInGrams &&
+        coinDiameterInMillimeters === quarterDiameterInMillimeters &&
+        coinThicknessInMillimeters === quarterThicknessInMillimeters
       );
     }
 
@@ -93,22 +93,28 @@ var VendingMachine = (function () {
       }
     }
 
-    function onCoinInserted(coin) {
+    function getCoinValueInDollars(coin) {
       if (coinIsNickel(coin)) {
-        coinsOnHand.push(coin);
-        dollarsInserted += 0.05;
+        return 0.05;
       } else if (coinIsDime(coin)) {
-        coinsOnHand.push(coin);
-        dollarsInserted += 0.1;
+        return 0.1;
       } else if (coinIsQuarter(coin)) {
-        coinsOnHand.push(coin);
-        dollarsInserted += 0.25;
+        return 0.25;
+      }
+    }
+
+    function acceptCoin(coin) {
+      var coinValueInDollars = getCoinValueInDollars(coin);
+      dollarsInserted += coinValueInDollars;
+      displayText = '$' + dollarsInserted.toFixed(2);
+      coinsOnHand.push(coin);
+    }
+
+    function onCoinInserted(coin) {
+      if (coinIsNickel(coin) || coinIsDime(coin) || coinIsQuarter(coin)) {
+        acceptCoin(coin);
       } else {
         rejectCoin(coin);
-      }
-
-      if (dollarsInserted > 0) {
-        displayText = '$' + dollarsInserted.toFixed(2);
       }
     }
 
