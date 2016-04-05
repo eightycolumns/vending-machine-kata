@@ -113,9 +113,7 @@ var VendingMachine = (function () {
     }
 
     function rejectCoin(coin) {
-      var coinReturnContents = coinReturn.getContents();
-      coinReturnContents.push(coin);
-      coinReturn.setContents(coinReturnContents);
+      coinReturn.addCoinToContents(coin);
     }
 
     return deepFreeze({

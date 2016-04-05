@@ -2,17 +2,17 @@ var CoinReturn = (function () {
   function create() {
     var contents = [];
 
+    function addCoinToContents(coin) {
+      contents.push(coin);
+    }
+
     function getContents() {
       return contents;
     }
 
-    function setContents(newContents) {
-      contents = newContents;
-    }
-
     return deepFreeze({
-      getContents: getContents,
-      setContents: setContents
+      addCoinToContents: addCoinToContents,
+      getContents: getContents
     });
   }
 
