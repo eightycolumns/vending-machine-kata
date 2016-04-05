@@ -84,8 +84,18 @@ var VendingMachine = (function () {
         var cola = Cola.create();
         var costInDollars = cola.getCostInDollars();
 
-        if (costInDollars <= dollarsInserted) {
+        if (dollarsInserted >= costInDollars) {
           dispenseProduct(cola);
+          displayText = 'THANK YOU';
+        } else {
+          displayText = 'PRICE: $' + costInDollars.toFixed(2);
+        }
+      } else if (button === 'Chips') {
+        var chips = Chips.create();
+        var costInDollars = chips.getCostInDollars();
+
+        if (dollarsInserted >= costInDollars) {
+          dispenseProduct(chips);
           displayText = 'THANK YOU';
         } else {
           displayText = 'PRICE: $' + costInDollars.toFixed(2);

@@ -156,6 +156,27 @@ describe('The vending machine', function () {
     expect(outputBinContainsCola).toBe(true);
   });
 
+  it('dispenses chips when chips are purchased', function () {
+    var quarter1 = Quarter.create();
+    vendingMachine.onCoinInserted(quarter1);
+
+    var quarter2 = Quarter.create();
+    vendingMachine.onCoinInserted(quarter2);
+
+    vendingMachine.onButtonPressed('Chips');
+    var outputBinContents = vendingMachine.outputBin.getContents();
+
+    var outputBinContainsChips = outputBinContents.some(function (product) {
+      var chips = Chips.create();
+      chips = JSON.stringify(chips);
+      product = JSON.stringify(product);
+
+      return product === chips;
+    });
+
+    expect(outputBinContainsChips).toBe(true);
+  });
+
   describe('has a display', function () {
     it('that reads "INSERT COINS" when no coins have been inserted', function () {
       var displayText = vendingMachine.getDisplayText();
