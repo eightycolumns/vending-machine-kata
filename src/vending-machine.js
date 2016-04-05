@@ -64,9 +64,7 @@ var VendingMachine = (function () {
     }
 
     function dispenseProduct(product) {
-      var outputBinContents = outputBin.getContents();
-      outputBinContents.push(product);
-      outputBin.setContents(outputBinContents);
+      outputBin.addProductToContents(product);
     }
 
     function getCoinReturnContents() {
