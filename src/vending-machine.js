@@ -100,6 +100,16 @@ var VendingMachine = (function () {
         } else {
           displayText = 'PRICE: $' + costInDollars.toFixed(2);
         }
+      } else if (button === 'Candy') {
+        var candy = Candy.create();
+        var costInDollars = candy.getCostInDollars();
+
+        if (dollarsInserted >= costInDollars) {
+          dispenseProduct(candy);
+          displayText = 'THANK YOU';
+        } else {
+          displayText = 'PRICE: $' + costInDollars.toFixed(2);
+        }
       }
     }
 

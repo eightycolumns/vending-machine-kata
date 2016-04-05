@@ -177,6 +177,33 @@ describe('The vending machine', function () {
     expect(outputBinContainsChips).toBe(true);
   });
 
+  it('dispenses candy when candy is purchased', function () {
+    var quarter1 = Quarter.create();
+    vendingMachine.onCoinInserted(quarter1);
+
+    var quarter2 = Quarter.create();
+    vendingMachine.onCoinInserted(quarter2);
+
+    var dime = Dime.create();
+    vendingMachine.onCoinInserted(dime);
+
+    var nickel = Nickel.create();
+    vendingMachine.onCoinInserted(nickel);
+
+    vendingMachine.onButtonPressed('Candy');
+    var outputBinContents = vendingMachine.outputBin.getContents();
+
+    var outputBinContainsCandy = outputBinContents.some(function (product) {
+      var candy = Candy.create();
+      candy = JSON.stringify(candy);
+      product = JSON.stringify(product);
+
+      return product === candy;
+    });
+
+    expect(outputBinContainsCandy).toBe(true);
+  });
+
   describe('has a display', function () {
     it('that reads "INSERT COINS" when no coins have been inserted', function () {
       var displayText = vendingMachine.getDisplayText();
