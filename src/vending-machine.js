@@ -80,36 +80,23 @@ var VendingMachine = (function () {
     }
 
     function onButtonPressed(button) {
+      var product = undefined;
+
       if (button === 'Cola') {
-        var cola = Cola.create();
-        var costInDollars = cola.getCostInDollars();
-
-        if (dollarsInserted >= costInDollars) {
-          dispenseProduct(cola);
-          displayText = 'THANK YOU';
-        } else {
-          displayText = 'PRICE: $' + costInDollars.toFixed(2);
-        }
+        product = Cola.create();
       } else if (button === 'Chips') {
-        var chips = Chips.create();
-        var costInDollars = chips.getCostInDollars();
-
-        if (dollarsInserted >= costInDollars) {
-          dispenseProduct(chips);
-          displayText = 'THANK YOU';
-        } else {
-          displayText = 'PRICE: $' + costInDollars.toFixed(2);
-        }
+        product = Chips.create();
       } else if (button === 'Candy') {
-        var candy = Candy.create();
-        var costInDollars = candy.getCostInDollars();
+        product = Candy.create();
+      }
 
-        if (dollarsInserted >= costInDollars) {
-          dispenseProduct(candy);
-          displayText = 'THANK YOU';
-        } else {
-          displayText = 'PRICE: $' + costInDollars.toFixed(2);
-        }
+      var productCostInDollars = product.getCostInDollars();
+
+      if (dollarsInserted >= productCostInDollars) {
+        dispenseProduct(product);
+        displayText = 'THANK YOU';
+      } else {
+        displayText = 'PRICE: $' + productCostInDollars.toFixed(2);
       }
     }
 
