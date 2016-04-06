@@ -1,28 +1,24 @@
 var VendingMachine = (function () {
   function create() {
     var coinReturn = CoinReturn.create();
-    var coinsOnHand = [];
-    var displayText = 'INSERT COINS';
-    var centsInserted = 0;
+    var display = Display.create('INSERT COINS');
     var outputBin = OutputBin.create();
 
-    function coinIsDime(coin) {
-      var dime = Dime.create();
+    var coinsOnHand = [];
+    var centsInserted = 0;
 
-      var coinWeightInGrams = coin.getWeightInGrams();
-      var dimeWeightInGrams = dime.getWeightInGrams();
+    function insertCoins(coins) {
+      coins.forEach(function (coin) {
+        insertCoin(coin);
+      });
+    }
 
-      var coinDiameterInMillimeters = coin.getDiameterInMillimeters();
-      var dimeDiameterInMillimeters = dime.getDiameterInMillimeters();
-
-      var coinThicknessInMillimeters = coin.getThicknessInMillimeters();
-      var dimeThicknessInMillimeters = dime.getThicknessInMillimeters();
-
-      return (
-        coinWeightInGrams === dimeWeightInGrams &&
-        coinDiameterInMillimeters === dimeDiameterInMillimeters &&
-        coinThicknessInMillimeters === dimeThicknessInMillimeters
-      );
+    function insertCoin(coin) {
+      if (coinIsNickel(coin) || coinIsDime(coin) || coinIsQuarter(coin)) {
+        acceptCoin(coin);
+      } else {
+        rejectCoin(coin);
+      }
     }
 
     function coinIsNickel(coin) {
@@ -41,6 +37,25 @@ var VendingMachine = (function () {
         coinWeightInGrams === nickelWeightInGrams &&
         coinDiameterInMillimeters === nickelDiameterInMillimeters &&
         coinThicknessInMillimeters === nickelThicknessInMillimeters
+      );
+    }
+
+    function coinIsDime(coin) {
+      var dime = Dime.create();
+
+      var coinWeightInGrams = coin.getWeightInGrams();
+      var dimeWeightInGrams = dime.getWeightInGrams();
+
+      var coinDiameterInMillimeters = coin.getDiameterInMillimeters();
+      var dimeDiameterInMillimeters = dime.getDiameterInMillimeters();
+
+      var coinThicknessInMillimeters = coin.getThicknessInMillimeters();
+      var dimeThicknessInMillimeters = dime.getThicknessInMillimeters();
+
+      return (
+        coinWeightInGrams === dimeWeightInGrams &&
+        coinDiameterInMillimeters === dimeDiameterInMillimeters &&
+        coinThicknessInMillimeters === dimeThicknessInMillimeters
       );
     }
 
@@ -63,31 +78,36 @@ var VendingMachine = (function () {
       );
     }
 
-    function dispenseProduct(product) {
-      outputBin.addProductToContents(product);
+    function acceptCoin(coin) {
+      var coinValueInCents = getCoinValueInCents(coin);
+      centsInserted += coinValueInCents;
+      display.setText('$' + (centsInserted / 100).toFixed(2));
+      coinsOnHand.push(coin);
     }
 
-    function getCoinReturnContents() {
-      return coinReturn.getContents();
+    function getCoinValueInCents(coin) {
+      if (coinIsNickel(coin)) {
+        return 5;
+      } else if (coinIsDime(coin)) {
+        return 10;
+      } else if (coinIsQuarter(coin)) {
+        return 25;
+      }
     }
 
-    function getCoinsOnHand() {
-      return coinsOnHand;
+    function rejectCoin(coin) {
+      coinReturn.addCoinToContents(coin);
     }
 
-    function getDisplayText() {
-      return displayText;
-    }
-
-    function onButtonPressed(button) {
-      var product = undefined;
-
+    function pressButton(button) {
       if (button === 'Cola') {
-        product = Cola.create();
+        var product = Cola.create();
       } else if (button === 'Chips') {
-        product = Chips.create();
+        var product = Chips.create();
       } else if (button === 'Candy') {
-        product = Candy.create();
+        var product = Candy.create();
+      } else {
+        return undefined;
       }
 
       var productCostInCents = product.getCostInCents();
@@ -95,11 +115,15 @@ var VendingMachine = (function () {
       if (centsInserted >= productCostInCents) {
         dispenseProduct(product);
         makeChange(centsInserted, productCostInCents);
-        centsInserted = 0;
-        displayText = 'THANK YOU';
+        display.setText('THANK YOU');
+        endTransaction();
       } else {
-        displayText = 'PRICE: $' + (productCostInCents / 100).toFixed(2);
+        display.setText('PRICE: $' + (productCostInCents / 100).toFixed(2));
       }
+    }
+
+    function dispenseProduct(product) {
+      outputBin.addProductToContents(product);
     }
 
     function makeChange(centsInserted, productCostInCents) {
@@ -126,44 +150,17 @@ var VendingMachine = (function () {
       }
     }
 
-    function getCoinValueInCents(coin) {
-      if (coinIsNickel(coin)) {
-        return 5;
-      } else if (coinIsDime(coin)) {
-        return 10;
-      } else if (coinIsQuarter(coin)) {
-        return 25;
-      }
-    }
-
-    function acceptCoin(coin) {
-      var coinValueInCents = getCoinValueInCents(coin);
-      centsInserted += coinValueInCents;
-      displayText = '$' + (centsInserted / 100).toFixed(2);
-      coinsOnHand.push(coin);
-    }
-
-    function onCoinInserted(coin) {
-      if (coinIsNickel(coin) || coinIsDime(coin) || coinIsQuarter(coin)) {
-        acceptCoin(coin);
-      } else {
-        rejectCoin(coin);
-      }
-    }
-
-    function rejectCoin(coin) {
-      coinReturn.addCoinToContents(coin);
+    function endTransaction() {
+      centsInserted = 0;
     }
 
     return deepFreeze({
       coinReturn: coinReturn,
-      dispenseProduct: dispenseProduct,
-      getCoinReturnContents: getCoinReturnContents,
-      getCoinsOnHand: getCoinsOnHand,
-      getDisplayText: getDisplayText,
-      onButtonPressed: onButtonPressed,
-      onCoinInserted: onCoinInserted,
-      outputBin: outputBin
+      display: display,
+      insertCoin: insertCoin,
+      insertCoins: insertCoins,
+      outputBin: outputBin,
+      pressButton: pressButton
     });
   }
 
