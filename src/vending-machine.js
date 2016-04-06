@@ -5,7 +5,7 @@ var VendingMachine = (function () {
     var outputBin = OutputBin.create();
 
     var coinsOnHand = [];
-    var centsInserted = 0;
+    var coinsInserted = [];
 
     function insertCoins(coins) {
       coins.forEach(function (coin) {
@@ -79,13 +79,22 @@ var VendingMachine = (function () {
     }
 
     function acceptCoin(coin) {
-      var coinValueInCents = getCoinValueInCents(coin);
-      centsInserted += coinValueInCents;
+      coinsInserted.push(coin);
+      var centsInserted = getTotalValueOfCoinsInCents(coinsInserted);
       display.setText('$' + (centsInserted / 100).toFixed(2));
-      coinsOnHand.push(coin);
     }
 
-    function getCoinValueInCents(coin) {
+    function getTotalValueOfCoinsInCents(coins) {
+      var totalValueOfCoinsInCents = 0;
+
+      coins.forEach(function (coin) {
+        totalValueOfCoinsInCents += getValueOfCoinInCents(coin);
+      });
+
+      return totalValueOfCoinsInCents;
+    }
+
+    function getValueOfCoinInCents(coin) {
       if (coinIsNickel(coin)) {
         return 5;
       } else if (coinIsDime(coin)) {
@@ -100,7 +109,13 @@ var VendingMachine = (function () {
     }
 
     function pressButton(button) {
-      if (button === 'Cola') {
+      if (button === 'Return Coins') {
+        while (coinsInserted.length > 0) {
+          coinReturn.addCoinToContents(coinsInserted.pop());
+        }
+
+        return undefined;
+      } else if (button === 'Cola') {
         var product = Cola.create();
       } else if (button === 'Chips') {
         var product = Chips.create();
@@ -110,9 +125,14 @@ var VendingMachine = (function () {
         return undefined;
       }
 
+      var centsInserted = getTotalValueOfCoinsInCents(coinsInserted);
       var productCostInCents = product.getCostInCents();
 
       if (centsInserted >= productCostInCents) {
+        while (coinsInserted.length > 0) {
+          coinsOnHand.push(coinsInserted.pop());
+        }
+
         dispenseProduct(product);
         makeChange(centsInserted, productCostInCents);
         display.setText('THANK YOU');

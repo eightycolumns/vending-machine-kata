@@ -77,6 +77,15 @@ describe('The vending machine', function () {
     expect(vendingMachine.display.getText()).toBe('$1.00');
   });
 
+  it('returns the coins that have been inserted when the "Return Coins" button is pressed', function () {
+    var quarter = Quarter.create();
+    vendingMachine.insertCoin(quarter);
+
+    vendingMachine.pressButton('Return Coins');
+
+    expect(vendingMachine.coinReturn.getContents()).toContain(quarter);
+  });
+
   it('displays the cost of the product when a button is pressed before enough money has been inserted', function () {
     var quarter = Quarter.create();
     vendingMachine.insertCoin(quarter);
