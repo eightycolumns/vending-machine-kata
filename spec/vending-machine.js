@@ -95,6 +95,21 @@ describe('The vending machine', function () {
     expect(vendingMachine.display.getText()).toBe('PRICE: $1.00');
   });
 
+  it('displays "SOLD OUT" when the selected product is out of stock', function () {
+    var coins = [
+      Quarter.create(),
+      Quarter.create(),
+      Quarter.create(),
+      Quarter.create()
+    ];
+
+    vendingMachine.insertCoins(coins);
+
+    vendingMachine.pressColaButton();
+
+    expect(vendingMachine.display.getText()).toBe('SOLD OUT');
+  });
+
   it('dispenses cola when cola is purchased', function () {
     var coins = [
       Quarter.create(),

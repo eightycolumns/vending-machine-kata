@@ -5,6 +5,8 @@ var VendingMachine = (function () {
     var outputBin = OutputBin.create();
 
     var coinsOnHand = [];
+    var productsOnHand = [];
+
     var coinsInserted = [];
 
     function insertCoins(coins) {
@@ -142,6 +144,32 @@ var VendingMachine = (function () {
       }
     }
 
+    function pressColaButton() {
+      var colaSoldOut = productsOnHand.every(function (product) {
+        return product.getName() !== 'Cola';
+      });
+
+      if (colaSoldOut) {
+        display.setText('SOLD OUT');
+      } else {
+        var cola = (function () {
+          for (var i = 0; i < productsOnHand.length; i += 1) {
+            var product = productsOnHand[i];
+            product = JSON.stringify(product);
+
+            var cola = Cola.create();
+            cola = JSON.stringify(cola);
+
+            if (product === cola) {
+              return productsOnHand.splice(i, 1).pop();
+            }
+          }
+        })();
+
+        outputBin.addProductToContents(cola);
+      }
+    }
+
     function dispenseProduct(product) {
       outputBin.addProductToContents(product);
     }
@@ -180,7 +208,8 @@ var VendingMachine = (function () {
       insertCoin: insertCoin,
       insertCoins: insertCoins,
       outputBin: outputBin,
-      pressButton: pressButton
+      pressButton: pressButton,
+      pressColaButton: pressColaButton
     });
   }
 
