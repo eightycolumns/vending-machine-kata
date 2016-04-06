@@ -3,7 +3,7 @@ var VendingMachine = (function () {
     var coinReturn = CoinReturn.create();
     var coinsOnHand = [];
     var displayText = 'INSERT COINS';
-    var dollarsInserted = 0;
+    var centsInserted = 0;
     var outputBin = OutputBin.create();
 
     function coinIsDime(coin) {
@@ -90,30 +90,56 @@ var VendingMachine = (function () {
         product = Candy.create();
       }
 
-      var productCostInDollars = product.getCostInDollars();
+      var productCostInCents = product.getCostInCents();
 
-      if (dollarsInserted >= productCostInDollars) {
+      if (centsInserted >= productCostInCents) {
         dispenseProduct(product);
+        makeChange(centsInserted, productCostInCents);
+        centsInserted = 0;
         displayText = 'THANK YOU';
       } else {
-        displayText = 'PRICE: $' + productCostInDollars.toFixed(2);
+        displayText = 'PRICE: $' + (productCostInCents / 100).toFixed(2);
       }
     }
 
-    function getCoinValueInDollars(coin) {
+    function makeChange(centsInserted, productCostInCents) {
+      var change = centsInserted - productCostInCents;
+
+      var valueOfNickel = 5;
+      var valueOfDime = 10;
+      var valueOfQuarter = 25;
+
+      while (change > 0) {
+        if (change >= valueOfQuarter) {
+          var quarter = Quarter.create();
+          coinReturn.addCoinToContents(quarter);
+          change -= valueOfQuarter;
+        } else if (change >= valueOfDime) {
+          var dime = Dime.create();
+          coinReturn.addCoinToContents(dime);
+          change -= valueOfDime;
+        } else if (change >= valueOfNickel) {
+          var nickel = Nickel.create();
+          coinReturn.addCoinToContents(nickel);
+          change -= valueOfNickel;
+        }
+      }
+    }
+
+    function getCoinValueInCents(coin) {
       if (coinIsNickel(coin)) {
-        return 0.05;
+        return 5;
       } else if (coinIsDime(coin)) {
-        return 0.1;
+        return 10;
       } else if (coinIsQuarter(coin)) {
-        return 0.25;
+        return 25;
       }
     }
 
     function acceptCoin(coin) {
-      var coinValueInDollars = getCoinValueInDollars(coin);
-      dollarsInserted += coinValueInDollars;
-      displayText = '$' + dollarsInserted.toFixed(2);
+      var coinValueInCents = getCoinValueInCents(coin);
+      centsInserted += coinValueInCents;
+      displayText = '$' + (centsInserted / 100).toFixed(2);
       coinsOnHand.push(coin);
     }
 

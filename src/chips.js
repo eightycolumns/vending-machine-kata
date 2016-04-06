@@ -1,7 +1,7 @@
 var Chips = (function () {
   function create() {
-    var costInDollars = 0.5;
-    return Product.create(costInDollars);
+    var costInCents = 50;
+    return Product.create(costInCents);
   }
 
   return deepFreeze({

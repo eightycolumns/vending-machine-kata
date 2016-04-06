@@ -1,7 +1,7 @@
 var Candy = (function () {
   function create() {
-    var costInDollars = 0.65;
-    return Product.create(costInDollars);
+    var costInCents = 65;
+    return Product.create(costInCents);
   }
 
   return deepFreeze({

@@ -1,12 +1,12 @@
 var Product = (function () {
-  function create(costInDollars) {
+  function create(costInCents) {
 
-    function getCostInDollars() {
-      return costInDollars;
+    function getCostInCents() {
+      return costInCents;
     }
 
     return deepFreeze({
-      getCostInDollars: getCostInDollars
+      getCostInCents: getCostInCents
     });
   }
 

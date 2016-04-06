@@ -69,7 +69,7 @@ describe('Products', function () {
     var cola = Cola.create();
 
     it('costs $1.00', function () {
-      expect(cola.getCostInDollars()).toBe(1);
+      expect(cola.getCostInCents()).toBe(100);
     });
   });
 
@@ -77,7 +77,7 @@ describe('Products', function () {
     var chips = Chips.create();
 
     it('cost $0.50', function () {
-      expect(chips.getCostInDollars()).toBe(0.5);
+      expect(chips.getCostInCents()).toBe(50);
     });
   });
 
@@ -85,7 +85,7 @@ describe('Products', function () {
     var candy = Candy.create();
 
     it('costs $0.65', function () {
-      expect(candy.getCostInDollars()).toBe(0.65);
+      expect(candy.getCostInCents()).toBe(65);
     });
   });
 });
@@ -202,6 +202,30 @@ describe('The vending machine', function () {
     });
 
     expect(outputBinContainsCandy).toBe(true);
+  });
+
+  it('makes change when the amount inserted exceeds the cost of the product purchased', function () {
+    var quarter1 = Quarter.create();
+    vendingMachine.onCoinInserted(quarter1);
+
+    var quarter2 = Quarter.create();
+    vendingMachine.onCoinInserted(quarter2);
+
+    var quarter3 = Quarter.create();
+    vendingMachine.onCoinInserted(quarter3);
+
+    vendingMachine.onButtonPressed('Candy');
+    var coinReturnContents = vendingMachine.coinReturn.getContents();
+
+    var coinReturnContainsDime = coinReturnContents.some(function (coin) {
+      var dime = Dime.create();
+      dime = JSON.stringify(dime);
+      coin = JSON.stringify(coin);
+
+      return coin === dime;
+    });
+
+    expect(coinReturnContainsDime).toBe(true);
   });
 
   describe('has a display', function () {
