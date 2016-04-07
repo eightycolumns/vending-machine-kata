@@ -1,12 +1,14 @@
 var Chips = (function () {
-  function create() {
-    var name = 'Chips';
-    var costInCents = 50;
 
-    return Product.create(name, costInCents);
-  }
+function create() {
+  var name = 'Chips';
+  var costInCents = 50;
 
-  return deepFreeze({
-    create: create
-  });
+  return Product.create(name, costInCents);
+}
+
+return deepFreeze({
+  create: create
+});
+
 })();

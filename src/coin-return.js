@@ -1,22 +1,24 @@
 var CoinReturn = (function () {
-  function create() {
-    var contents = [];
 
-    function addCoinToContents(coin) {
-      contents.push(coin);
-    }
+function create() {
+  var contents = [];
 
-    function getContents() {
-      return contents;
-    }
+  function addCoinToContents(coin) {
+    contents.push(coin);
+  }
 
-    return deepFreeze({
-      addCoinToContents: addCoinToContents,
-      getContents: getContents
-    });
+  function getContents() {
+    return contents;
   }
 
   return deepFreeze({
-    create: create
+    addCoinToContents: addCoinToContents,
+    getContents: getContents
   });
+}
+
+return deepFreeze({
+  create: create
+});
+
 })();

@@ -105,93 +105,89 @@ describe('The vending machine', function () {
 
     vendingMachine.insertCoins(coins);
 
-    vendingMachine.pressColaButton();
+    vendingMachine.pressButton('Cola');
 
     expect(vendingMachine.display.getText()).toBe('SOLD OUT');
   });
 
   it('dispenses cola when cola is purchased', function () {
-    var coins = [
+    vendingMachine.stockWithProducts([
+      Cola.create()
+    ]);
+
+    vendingMachine.insertCoins([
       Quarter.create(),
       Quarter.create(),
       Quarter.create(),
       Quarter.create()
-    ];
-
-    vendingMachine.insertCoins(coins);
+    ]);
 
     vendingMachine.pressButton('Cola');
 
     var outputBinContents = vendingMachine.outputBin.getContents();
 
     var outputBinContainsCola = outputBinContents.some(function (product) {
-      var cola = Cola.create();
-      cola = JSON.stringify(cola);
-      product = JSON.stringify(product);
-
-      return product === cola;
+      return product.getName() === 'Cola';
     });
 
     expect(outputBinContainsCola).toBe(true);
   });
 
   it('dispenses chips when chips are purchased', function () {
-    var coins = [
+    vendingMachine.stockWithProducts([
+      Chips.create()
+    ]);
+
+    vendingMachine.insertCoins([
       Quarter.create(),
       Quarter.create()
-    ];
-
-    vendingMachine.insertCoins(coins);
+    ]);
 
     vendingMachine.pressButton('Chips');
 
     var outputBinContents = vendingMachine.outputBin.getContents();
 
     var outputBinContainsChips = outputBinContents.some(function (product) {
-      var chips = Chips.create();
-      chips = JSON.stringify(chips);
-      product = JSON.stringify(product);
-
-      return product === chips;
+      return product.getName() === 'Chips';
     });
 
     expect(outputBinContainsChips).toBe(true);
   });
 
   it('dispenses candy when candy is purchased', function () {
-    var coins = [
+    vendingMachine.stockWithProducts([
+      Candy.create()
+    ]);
+
+    vendingMachine.insertCoins([
       Quarter.create(),
       Quarter.create(),
       Dime.create(),
       Nickel.create()
-    ];
-
-    vendingMachine.insertCoins(coins);
+    ]);
 
     vendingMachine.pressButton('Candy');
 
     var outputBinContents = vendingMachine.outputBin.getContents();
 
     var outputBinContainsCandy = outputBinContents.some(function (product) {
-      var candy = Candy.create();
-      candy = JSON.stringify(candy);
-      product = JSON.stringify(product);
-
-      return product === candy;
+      return product.getName() === 'Candy';
     });
 
     expect(outputBinContainsCandy).toBe(true);
   });
 
   it('displays "THANK YOU" when an item is purchased', function () {
-    var coins = [
+    vendingMachine.stockWithProducts([
+      Cola.create()
+    ]);
+
+    vendingMachine.insertCoins([
       Quarter.create(),
       Quarter.create(),
       Quarter.create(),
       Quarter.create()
-    ];
-
-    vendingMachine.insertCoins(coins);
+    ]);
 
     vendingMachine.pressButton('Cola');
 
@@ -199,29 +195,57 @@ describe('The vending machine', function () {
   });
 
   it('makes change when the amount inserted exceeds the cost of the product purchased', function () {
-    var coins = [
+    vendingMachine.stockWithProducts([
+      Candy.create()
+    ]);
+
+    vendingMachine.insertCoins([
       Quarter.create(),
       Quarter.create(),
       Quarter.create()
-    ];
-
-    vendingMachine.insertCoins(coins);
+    ]);
 
     vendingMachine.pressButton('Candy');
 
     var coinReturnContents = vendingMachine.coinReturn.getContents();
 
     var coinReturnContainsDime = coinReturnContents.some(function (coin) {
-      var dime = Dime.create();
-      dime = JSON.stringify(dime);
-      coin = JSON.stringify(coin);
-
-      return coin === dime;
+      return coinIsDime(coin);
     });
 
     expect(coinReturnContainsDime).toBe(true);
   });
 });
+
+function coinIsNickel(coin) {
+  var nickel = Nickel.create();
+
+  return (
+    coin.getWeightInGrams() === nickel.getWeightInGrams() &&
+    coin.getDiameterInMillimeters() === nickel.getDiameterInMillimeters() &&
+    coin.getThicknessInMillimeters() === nickel.getThicknessInMillimeters()
+  );
+}
+
+function coinIsDime(coin) {
+  var dime = Dime.create();
+
+  return (
+    coin.getWeightInGrams() === dime.getWeightInGrams() &&
+    coin.getDiameterInMillimeters() === dime.getDiameterInMillimeters() &&
+    coin.getThicknessInMillimeters() === dime.getThicknessInMillimeters()
+  );
+}
+
+function coinIsQuarter(coin) {
+  var quarter = Quarter.create();
+
+  return (
+    coin.getWeightInGrams() === quarter.getWeightInGrams() &&
+    coin.getDiameterInMillimeters() === quarter.getDiameterInMillimeters() &&
+    coin.getThicknessInMillimeters() === quarter.getThicknessInMillimeters()
+  );
+}
 
 describe('Coins', function () {
   describe('Pennies', function () {

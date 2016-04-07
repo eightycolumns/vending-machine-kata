@@ -1,26 +1,28 @@
 var Coin = (function () {
-  function create(spec) {
 
-    function getWeightInGrams() {
-      return spec.weightInGrams;
-    }
+function create(spec) {
 
-    function getDiameterInMillimeters() {
-      return spec.diameterInMillimeters;
-    }
+  function getWeightInGrams() {
+    return spec.weightInGrams;
+  }
 
-    function getThicknessInMillimeters() {
-      return spec.thicknessInMillimeters;
-    }
+  function getDiameterInMillimeters() {
+    return spec.diameterInMillimeters;
+  }
 
-    return deepFreeze({
-      getWeightInGrams: getWeightInGrams,
-      getDiameterInMillimeters: getDiameterInMillimeters,
-      getThicknessInMillimeters: getThicknessInMillimeters
-    });
+  function getThicknessInMillimeters() {
+    return spec.thicknessInMillimeters;
   }
 
   return deepFreeze({
-    create: create
+    getWeightInGrams: getWeightInGrams,
+    getDiameterInMillimeters: getDiameterInMillimeters,
+    getThicknessInMillimeters: getThicknessInMillimeters
   });
+}
+
+return deepFreeze({
+  create: create
+});
+
 })();

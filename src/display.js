@@ -1,22 +1,24 @@
 var Display = (function () {
-  function create(initialText) {
-    var text = initialText;
 
-    function getText() {
-      return text;
-    }
+function create(initialText) {
+  var text = initialText;
 
-    function setText(newText) {
-      text = newText;
-    }
-
-    return ({
-      getText: getText,
-      setText: setText
-    });
+  function getText() {
+    return text;
   }
 
-  return deepFreeze({
-    create: create
+  function setText(newText) {
+    text = newText;
+  }
+
+  return ({
+    getText: getText,
+    setText: setText
   });
+}
+
+return deepFreeze({
+  create: create
+});
+
 })();

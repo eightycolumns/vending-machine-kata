@@ -1,21 +1,23 @@
 var Product = (function () {
-  function create(name, costInCents) {
 
-    function getName() {
-      return name;
-    }
+function create(name, costInCents) {
 
-    function getCostInCents() {
-      return costInCents;
-    }
+  function getName() {
+    return name;
+  }
 
-    return deepFreeze({
-      getName: getName,
-      getCostInCents: getCostInCents
-    });
+  function getCostInCents() {
+    return costInCents;
   }
 
   return deepFreeze({
-    create: create
+    getName: getName,
+    getCostInCents: getCostInCents
   });
+}
+
+return deepFreeze({
+  create: create
+});
+
 })();

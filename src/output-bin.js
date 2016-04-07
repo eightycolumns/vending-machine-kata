@@ -1,22 +1,24 @@
 var OutputBin = (function () {
-  function create() {
-    var contents = [];
 
-    function addProductToContents(product) {
-      contents.push(product);
-    }
+function create() {
+  var contents = [];
 
-    function getContents() {
-      return contents;
-    }
+  function addProductToContents(product) {
+    contents.push(product);
+  }
 
-    return deepFreeze({
-      addProductToContents: addProductToContents,
-      getContents: getContents
-    });
+  function getContents() {
+    return contents;
   }
 
   return deepFreeze({
-    create: create
+    addProductToContents: addProductToContents,
+    getContents: getContents
   });
+}
+
+return deepFreeze({
+  create: create
+});
+
 })();
