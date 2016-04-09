@@ -1,129 +1,89 @@
 var VendingMachine = (function () {
 
 function create() {
-  var coinReturn = CoinReturn.create();
+  var coinIdentifier = CoinIdentifier.create();
+
   var display = Display.create('INSERT COINS');
-  var outputBin = OutputBin.create();
 
-  var coinsOnHand = [];
-  var productsOnHand = [];
+  var coinsInserted = CoinCollection.create();
+  var coinReturnContents = CoinCollection.create();
 
-  var coinsInserted = [];
+  var dimesOnHand = CoinCollection.create();
+  var nickelsOnHand = CoinCollection.create();
+  var quartersOnHand = CoinCollection.create();
 
-  function stockWithProducts(products) {
-    products.forEach(function (product) {
-      productsOnHand.push(product);
-    });
+  var outputBinContents = ProductCollection.create();
+
+  var colaOnHand = ProductCollection.create();
+  var chipsOnHand = ProductCollection.create();
+  var candyOnHand = ProductCollection.create();
+
+  function getCoinReturnContents() {
+    return coinReturnContents;
+  }
+
+  function getOutputBinContents() {
+    return outputBinContents;
+  }
+
+  function getDisplayText() {
+    return display.getText();
   }
 
   function insertCoins(coins) {
     coins.forEach(function (coin) {
-      insertCoin(coin);
+      if (coinIdentifier.coinIsNickel(coin)) {
+        acceptCoin(coin);
+      } else if (coinIdentifier.coinIsDime(coin)) {
+        acceptCoin(coin);
+      } else if (coinIdentifier.coinIsQuarter(coin)) {
+        acceptCoin(coin);
+      } else {
+        rejectCoin(coin);
+      }
     });
-  }
-
-  function insertCoin(coin) {
-    if (coinIsNickel(coin) || coinIsDime(coin) || coinIsQuarter(coin)) {
-      acceptCoin(coin);
-    } else {
-      rejectCoin(coin);
-    }
-  }
-
-  function coinIsNickel(coin) {
-    var nickel = Nickel.create();
-
-    return (
-      coin.getWeightInGrams() === nickel.getWeightInGrams() &&
-      coin.getDiameterInMillimeters() === nickel.getDiameterInMillimeters() &&
-      coin.getThicknessInMillimeters() === nickel.getThicknessInMillimeters()
-    );
-  }
-
-  function coinIsDime(coin) {
-    var dime = Dime.create();
-
-    return (
-      coin.getWeightInGrams() === dime.getWeightInGrams() &&
-      coin.getDiameterInMillimeters() === dime.getDiameterInMillimeters() &&
-      coin.getThicknessInMillimeters() === dime.getThicknessInMillimeters()
-    );
-  }
-
-  function coinIsQuarter(coin) {
-    var quarter = Quarter.create();
-
-    return (
-      coin.getWeightInGrams() === quarter.getWeightInGrams() &&
-      coin.getDiameterInMillimeters() === quarter.getDiameterInMillimeters() &&
-      coin.getThicknessInMillimeters() === quarter.getThicknessInMillimeters()
-    );
   }
 
   function acceptCoin(coin) {
     coinsInserted.push(coin);
-    var centsInserted = getTotalValueOfCoinsInCents(coinsInserted);
-    display.setText('$' + (centsInserted / 100).toFixed(2));
+    var centsInserted = coinsInserted.getTotalValueInCents();
+    var displayText = formatCentsForDisplay(centsInserted);
+    display.setText(displayText);
   }
 
-  function getTotalValueOfCoinsInCents(coins) {
-    var totalValueOfCoinsInCents = 0;
-
-    coins.forEach(function (coin) {
-      totalValueOfCoinsInCents += getValueOfCoinInCents(coin);
-    });
-
-    return totalValueOfCoinsInCents;
-  }
-
-  function getValueOfCoinInCents(coin) {
-    if (coinIsNickel(coin)) {
-      return 5;
-    } else if (coinIsDime(coin)) {
-      return 10;
-    } else if (coinIsQuarter(coin)) {
-      return 25;
-    }
+  function formatCentsForDisplay(cents) {
+    return '$' + (cents / 100).toFixed(2);
   }
 
   function rejectCoin(coin) {
-    coinReturn.addCoinToContents(coin);
+    coinReturnContents.push(coin);
   }
 
   function pressButton(buttonText) {
     if (buttonText === 'Return Coins') {
-      while (coinsInserted.length > 0) {
-        coinReturn.addCoinToContents(coinsInserted.pop());
-      }
-
-      return undefined;
-    } else if (
-      buttonText === 'Cola' ||
-      buttonText === 'Chips' ||
-      buttonText === 'Candy'
-    ) {
-      var productName = buttonText;
+      pressCoinReturnButton();
     } else {
-      return undefined;
+      pressProductButton(buttonText);
     }
+  }
 
-    var centsInserted = getTotalValueOfCoinsInCents(coinsInserted);
+  function pressCoinReturnButton() {
+    while (!coinsInserted.isEmpty()) {
+      coinReturnContents.push(coinsInserted.pop());
+    }
+  }
 
+  function pressProductButton(productName) {
+    var centsInserted = coinsInserted.getTotalValueInCents();
     var productCostInCents = getProductCostInCents(productName);
 
     if (centsInserted < productCostInCents) {
-      display.setText('PRICE: $' + (productCostInCents / 100).toFixed(2));
+      var displayText = 'PRICE: ' + formatCentsForDisplay(productCostInCents);
+      display.setText(displayText);
     } else if (productIsSoldOut(productName)) {
       display.setText('SOLD OUT');
     } else {
-      while (coinsInserted.length > 0) {
-        coinsOnHand.push(coinsInserted.pop());
-      }
-
-      dispenseProduct(productName);
-      makeChange(centsInserted, productCostInCents);
-      display.setText('THANK YOU');
-      endTransaction();
+      sellProduct(productName);
     }
   }
 
@@ -138,59 +98,104 @@ function create() {
   }
 
   function productIsSoldOut(productName) {
-    return productsOnHand.every(function (product) {
-      product.getName() !== productName;
-    });
+    if (productName === 'Cola') {
+      return colaOnHand.isEmpty();
+    } else if (productName === 'Chips') {
+      return chipsOnHand.isEmpty();
+    } else if (productName === 'Candy') {
+      return candyOnHand.isEmpty();
+    }
   }
 
-  function dispenseProduct(productName) {
-    var product = (function () {
-      for (var i = 0; i < productsOnHand.length; i += 1) {
-        if (productsOnHand[i].getName() === productName) {
-          return productsOnHand.splice(i, 1).pop();
-        }
-      }
-    })();
+  function sellProduct(productName) {
+    var centsInserted = coinsInserted.getTotalValueInCents();
+    var productCostInCents = getProductCostInCents(productName);
 
-    outputBin.addProductToContents(product);
+    moveCoinsInsertedToCoinsOnHand();
+    dispenseProduct(productName);
+    makeChange(centsInserted, productCostInCents);
+    display.setText('THANK YOU');
   }
 
-  function makeChange(centsInserted, productCostInCents) {
-    var change = centsInserted - productCostInCents;
+  function moveCoinsInsertedToCoinsOnHand() {
+    while (!coinsInserted.isEmpty()) {
+      var coin = coinsInserted.pop();
 
-    var valueOfNickel = 5;
-    var valueOfDime = 10;
-    var valueOfQuarter = 25;
-
-    while (change > 0) {
-      if (change >= valueOfQuarter) {
-        var quarter = Quarter.create();
-        coinReturn.addCoinToContents(quarter);
-        change -= valueOfQuarter;
-      } else if (change >= valueOfDime) {
-        var dime = Dime.create();
-        coinReturn.addCoinToContents(dime);
-        change -= valueOfDime;
-      } else if (change >= valueOfNickel) {
-        var nickel = Nickel.create();
-        coinReturn.addCoinToContents(nickel);
-        change -= valueOfNickel;
+      if (coinIdentifier.coinIsNickel(coin)) {
+        nickelsOnHand.push(coin);
+      } else if (coinIdentifier.coinIsDime(coin)) {
+        dimesOnHand.push(coin);
+      } else if (coinIdentifier.coinIsQuarter(coin)) {
+        quartersOnHand.push(coin);
       }
     }
   }
 
-  function endTransaction() {
-    centsInserted = 0;
+  function dispenseProduct(productName) {
+    if (productName === 'Cola') {
+      outputBinContents.push(colaOnHand.pop());
+    } else if (productName === 'Chips') {
+      outputBinContents.push(chipsOnHand.pop());
+    } else if (productName === 'Candy') {
+      outputBinContents.push(candyOnHand.pop());
+    }
+  }
+
+  function makeChange(centsInserted, productCostInCents) {
+    var changeDueInCents = centsInserted - productCostInCents;
+
+    coinValuesInCents = {
+      nickel: 5,
+      dime: 10,
+      quarter: 25
+    };
+
+    while (changeDueInCents > 0) {
+      if (changeDueInCents >= coinValuesInCents.quarter) {
+        coinReturnContents.push(quartersOnHand.pop());
+        changeDueInCents -= coinValuesInCents.quarter;
+      } else if (changeDueInCents >= coinValuesInCents.dime) {
+        coinReturnContents.push(dimesOnHand.pop());
+        changeDueInCents -= coinValuesInCents.dime;
+      } else if (changeDueInCents >= coinValuesInCents.nickel) {
+        coinReturnContents.push(nickelsOnHand.pop());
+        changeDueInCents -= coinValuesInCents.nickel;
+      }
+    }
+  }
+
+  function stockWithCoins(coins) {
+    coins.forEach(function (coin) {
+      if (coinIdentifier.coinIsNickel(coin)) {
+        nickelsOnHand.push(coin);
+      } else if (coinIdentifier.coinIsDime(coin)) {
+        dimesOnHand.push(coin);
+      } else if (coinIdentifier.coinIsQuarter(coin)) {
+        quartersOnHand.push(coin);
+      }
+    });
+  }
+
+  function stockWithProducts(products) {
+    products.forEach(function (product) {
+      if (product.getName() === 'Cola') {
+        colaOnHand.push(product);
+      } else if (product.getName() === 'Chips') {
+        chipsOnHand.push(product);
+      } else if (product.getName() === 'Candy') {
+        candyOnHand.push(product);
+      }
+    });
   }
 
   return deepFreeze({
-    stockWithProducts: stockWithProducts,
-    coinReturn: coinReturn,
-    display: display,
-    insertCoin: insertCoin,
+    getCoinReturnContents: getCoinReturnContents,
+    getOutputBinContents: getOutputBinContents,
+    getDisplayText: getDisplayText,
     insertCoins: insertCoins,
-    outputBin: outputBin,
-    pressButton: pressButton
+    pressButton: pressButton,
+    stockWithCoins: stockWithCoins,
+    stockWithProducts: stockWithProducts
   });
 }
 

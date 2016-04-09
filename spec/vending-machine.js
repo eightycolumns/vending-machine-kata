@@ -6,108 +6,137 @@ describe('The vending machine', function () {
   });
 
   it('displays "INSERT COINS" when no coins have been inserted', function () {
-    expect(vendingMachine.display.getText()).toBe('INSERT COINS');
+    var displayText = vendingMachine.getDisplayText();
+
+    expect(displayText).toBe('INSERT COINS');
   });
 
   it('accepts nickels', function () {
-    var originalDisplayText = vendingMachine.display.getText();
+    var originalDisplayText = vendingMachine.getDisplayText();
 
-    var nickel = Nickel.create();
-    vendingMachine.insertCoin(nickel);
+    vendingMachine.insertCoins([
+      Nickel.create()
+    ]);
 
-    expect(vendingMachine.display.getText()).not.toBe(originalDisplayText);
+    var displayText = vendingMachine.getDisplayText();
+
+    expect(displayText).not.toBe(originalDisplayText);
   });
 
   it('displays "$0.05" when a nickel is inserted', function () {
-    var nickel = Nickel.create();
-    vendingMachine.insertCoin(nickel);
+    vendingMachine.insertCoins([
+      Nickel.create()
+    ]);
 
-    expect(vendingMachine.display.getText()).toBe('$0.05');
+    var displayText = vendingMachine.getDisplayText();
+
+    expect(displayText).toBe('$0.05');
   });
 
   it('accepts dimes', function () {
-    var originalDisplayText = vendingMachine.display.getText();
+    var originalDisplayText = vendingMachine.getDisplayText();
 
-    var dime = Dime.create();
-    vendingMachine.insertCoin(dime);
+    vendingMachine.insertCoins([
+      Dime.create()
+    ]);
 
-    expect(vendingMachine.display.getText()).not.toBe(originalDisplayText);
+    var displayText = vendingMachine.getDisplayText();
+
+    expect(displayText).not.toBe(originalDisplayText);
   });
 
   it('displays "$0.10" when a dime is inserted', function () {
-    var dime = Dime.create();
-    vendingMachine.insertCoin(dime);
+    vendingMachine.insertCoins([
+      Dime.create()
+    ]);
 
-    expect(vendingMachine.display.getText()).toBe('$0.10');
+    var displayText = vendingMachine.getDisplayText();
+
+    expect(displayText).toBe('$0.10');
   });
 
   it('accepts quarters', function () {
-    var originalDisplayText = vendingMachine.display.getText();
+    var originalDisplayText = vendingMachine.getDisplayText();
 
-    var quarter = Quarter.create();
-    vendingMachine.insertCoin(quarter);
+    vendingMachine.insertCoins([
+      Quarter.create()
+    ]);
 
-    expect(vendingMachine.display.getText()).not.toBe(originalDisplayText);
+    var displayText = vendingMachine.getDisplayText();
+
+    expect(displayText).not.toBe(originalDisplayText);
   });
 
   it('displays "$0.25" when a quarter is inserted', function () {
-    var quarter = Quarter.create();
-    vendingMachine.insertCoin(quarter);
+    vendingMachine.insertCoins([
+      Quarter.create()
+    ]);
 
-    expect(vendingMachine.display.getText()).toBe('$0.25');
+    var displayText = vendingMachine.getDisplayText();
+
+    expect(displayText).toBe('$0.25');
   });
 
   it('rejects pennies', function () {
-    var penny = Penny.create();
-    vendingMachine.insertCoin(penny);
+    vendingMachine.insertCoins([
+      Penny.create()
+    ]);
 
-    expect(vendingMachine.coinReturn.getContents()).toContain(penny);
+    var coinReturnContents = vendingMachine.getCoinReturnContents();
+
+    expect(coinReturnContents.containsPenny()).toBe(true);
   });
 
   it('displays the total amount inserted', function () {
-    var coins = [
-      Quarter.create(),
-      Quarter.create(),
-      Quarter.create(),
+    vendingMachine.insertCoins([
+      Nickel.create(),
+      Dime.create(),
       Quarter.create()
-    ];
+    ]);
 
-    vendingMachine.insertCoins(coins);
+    var displayText = vendingMachine.getDisplayText();
 
-    expect(vendingMachine.display.getText()).toBe('$1.00');
+    expect(displayText).toBe('$0.40');
   });
 
   it('returns the coins that have been inserted when the "Return Coins" button is pressed', function () {
-    var quarter = Quarter.create();
-    vendingMachine.insertCoin(quarter);
+    vendingMachine.insertCoins([
+      Nickel.create(),
+      Dime.create(),
+      Quarter.create()
+    ]);
 
     vendingMachine.pressButton('Return Coins');
+    var coinReturnContents = vendingMachine.getCoinReturnContents();
 
-    expect(vendingMachine.coinReturn.getContents()).toContain(quarter);
+    expect(coinReturnContents.containsNickel()).toBe(true);
+    expect(coinReturnContents.containsDime()).toBe(true);
+    expect(coinReturnContents.containsQuarter()).toBe(true);
   });
 
   it('displays the cost of the product when a button is pressed before enough money has been inserted', function () {
-    var quarter = Quarter.create();
-    vendingMachine.insertCoin(quarter);
+    vendingMachine.insertCoins([
+      Quarter.create()
+    ]);
 
     vendingMachine.pressButton('Cola');
+    var displayText = vendingMachine.getDisplayText();
 
-    expect(vendingMachine.display.getText()).toBe('PRICE: $1.00');
+    expect(displayText).toBe('PRICE: $1.00');
   });
 
   it('displays "SOLD OUT" when the selected product is out of stock', function () {
-    var coins = [
+    vendingMachine.insertCoins([
       Quarter.create(),
       Quarter.create(),
       Quarter.create(),
       Quarter.create()
-    ];
-
-    vendingMachine.insertCoins(coins);
+    ]);
 
     vendingMachine.pressButton('Cola');
+    var displayText = vendingMachine.getDisplayText();
 
-    expect(vendingMachine.display.getText()).toBe('SOLD OUT');
+    expect(displayText).toBe('SOLD OUT');
   });
 
   it('dispenses cola when cola is purchased', function () {
@@ -123,14 +152,9 @@ describe('The vending machine', function () {
     ]);
 
     vendingMachine.pressButton('Cola');
+    var outputBinContents = vendingMachine.getOutputBinContents();
 
-    var outputBinContents = vendingMachine.outputBin.getContents();
-
-    var outputBinContainsCola = outputBinContents.some(function (product) {
-      return product.getName() === 'Cola';
-    });
-
-    expect(outputBinContainsCola).toBe(true);
+    expect(outputBinContents.containsCola()).toBe(true);
   });
 
   it('dispenses chips when chips are purchased', function () {
@@ -144,14 +168,9 @@ describe('The vending machine', function () {
     ]);
 
     vendingMachine.pressButton('Chips');
+    var outputBinContents = vendingMachine.getOutputBinContents();
 
-    var outputBinContents = vendingMachine.outputBin.getContents();
-
-    var outputBinContainsChips = outputBinContents.some(function (product) {
-      return product.getName() === 'Chips';
-    });
-
-    expect(outputBinContainsChips).toBe(true);
+    expect(outputBinContents.containsChips()).toBe(true);
   });
 
   it('dispenses candy when candy is purchased', function () {
@@ -167,14 +186,9 @@ describe('The vending machine', function () {
     ]);
 
     vendingMachine.pressButton('Candy');
+    var outputBinContents = vendingMachine.getOutputBinContents();
 
-    var outputBinContents = vendingMachine.outputBin.getContents();
-
-    var outputBinContainsCandy = outputBinContents.some(function (product) {
-      return product.getName() === 'Candy';
-    });
-
-    expect(outputBinContainsCandy).toBe(true);
+    expect(outputBinContents.containsCandy()).toBe(true);
   });
 
   it('displays "THANK YOU" when an item is purchased', function () {
@@ -190,11 +204,16 @@ describe('The vending machine', function () {
     ]);
 
     vendingMachine.pressButton('Cola');
+    var displayText = vendingMachine.getDisplayText();
 
-    expect(vendingMachine.display.getText()).toBe('THANK YOU');
+    expect(displayText).toBe('THANK YOU');
   });
 
   it('makes change when the amount inserted exceeds the cost of the product purchased', function () {
+    vendingMachine.stockWithCoins([
+      Dime.create()
+    ]);
+
     vendingMachine.stockWithProducts([
       Candy.create()
     ]);
@@ -206,46 +225,11 @@ describe('The vending machine', function () {
     ]);
 
     vendingMachine.pressButton('Candy');
+    var coinReturnContents = vendingMachine.getCoinReturnContents();
 
-    var coinReturnContents = vendingMachine.coinReturn.getContents();
-
-    var coinReturnContainsDime = coinReturnContents.some(function (coin) {
-      return coinIsDime(coin);
-    });
-
-    expect(coinReturnContainsDime).toBe(true);
+    expect(coinReturnContents.containsDime()).toBe(true);
   });
 });
-
-function coinIsNickel(coin) {
-  var nickel = Nickel.create();
-
-  return (
-    coin.getWeightInGrams() === nickel.getWeightInGrams() &&
-    coin.getDiameterInMillimeters() === nickel.getDiameterInMillimeters() &&
-    coin.getThicknessInMillimeters() === nickel.getThicknessInMillimeters()
-  );
-}
-
-function coinIsDime(coin) {
-  var dime = Dime.create();
-
-  return (
-    coin.getWeightInGrams() === dime.getWeightInGrams() &&
-    coin.getDiameterInMillimeters() === dime.getDiameterInMillimeters() &&
-    coin.getThicknessInMillimeters() === dime.getThicknessInMillimeters()
-  );
-}
-
-function coinIsQuarter(coin) {
-  var quarter = Quarter.create();
-
-  return (
-    coin.getWeightInGrams() === quarter.getWeightInGrams() &&
-    coin.getDiameterInMillimeters() === quarter.getDiameterInMillimeters() &&
-    coin.getThicknessInMillimeters() === quarter.getThicknessInMillimeters()
-  );
-}
 
 describe('Coins', function () {
   describe('Pennies', function () {
