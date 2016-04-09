@@ -6,11 +6,11 @@ describe('The vending machine', function () {
   });
 
   it('displays "INSERT COINS" when no coins have been inserted', function () {
-    vendingMachine.stockWithCoins([
+    vendingMachine.stockWithCoins(
       Nickel.create(),
       Nickel.create(),
       Dime.create()
-    ]);
+    );
 
     var displayText = vendingMachine.getDisplayText();
 
@@ -26,9 +26,9 @@ describe('The vending machine', function () {
   it('accepts nickels', function () {
     var originalDisplayText = vendingMachine.getDisplayText();
 
-    vendingMachine.insertCoins([
+    vendingMachine.insertCoins(
       Nickel.create()
-    ]);
+    );
 
     var displayText = vendingMachine.getDisplayText();
 
@@ -36,9 +36,9 @@ describe('The vending machine', function () {
   });
 
   it('displays "$0.05" when a nickel is inserted', function () {
-    vendingMachine.insertCoins([
+    vendingMachine.insertCoins(
       Nickel.create()
-    ]);
+    );
 
     var displayText = vendingMachine.getDisplayText();
 
@@ -48,9 +48,9 @@ describe('The vending machine', function () {
   it('accepts dimes', function () {
     var originalDisplayText = vendingMachine.getDisplayText();
 
-    vendingMachine.insertCoins([
+    vendingMachine.insertCoins(
       Dime.create()
-    ]);
+    );
 
     var displayText = vendingMachine.getDisplayText();
 
@@ -58,9 +58,9 @@ describe('The vending machine', function () {
   });
 
   it('displays "$0.10" when a dime is inserted', function () {
-    vendingMachine.insertCoins([
+    vendingMachine.insertCoins(
       Dime.create()
-    ]);
+    );
 
     var displayText = vendingMachine.getDisplayText();
 
@@ -70,9 +70,9 @@ describe('The vending machine', function () {
   it('accepts quarters', function () {
     var originalDisplayText = vendingMachine.getDisplayText();
 
-    vendingMachine.insertCoins([
+    vendingMachine.insertCoins(
       Quarter.create()
-    ]);
+    );
 
     var displayText = vendingMachine.getDisplayText();
 
@@ -80,9 +80,9 @@ describe('The vending machine', function () {
   });
 
   it('displays "$0.25" when a quarter is inserted', function () {
-    vendingMachine.insertCoins([
+    vendingMachine.insertCoins(
       Quarter.create()
-    ]);
+    );
 
     var displayText = vendingMachine.getDisplayText();
 
@@ -90,9 +90,9 @@ describe('The vending machine', function () {
   });
 
   it('rejects pennies', function () {
-    vendingMachine.insertCoins([
+    vendingMachine.insertCoins(
       Penny.create()
-    ]);
+    );
 
     var coinReturnContents = vendingMachine.getCoinReturnContents();
 
@@ -100,11 +100,11 @@ describe('The vending machine', function () {
   });
 
   it('displays the total amount inserted', function () {
-    vendingMachine.insertCoins([
+    vendingMachine.insertCoins(
       Nickel.create(),
       Dime.create(),
       Quarter.create()
-    ]);
+    );
 
     var displayText = vendingMachine.getDisplayText();
 
@@ -112,11 +112,11 @@ describe('The vending machine', function () {
   });
 
   it('returns the coins that have been inserted when the "Return Coins" button is pressed', function () {
-    vendingMachine.insertCoins([
+    vendingMachine.insertCoins(
       Nickel.create(),
       Dime.create(),
       Quarter.create()
-    ]);
+    );
 
     vendingMachine.pressButton('Return Coins');
     var coinReturnContents = vendingMachine.getCoinReturnContents();
@@ -127,17 +127,17 @@ describe('The vending machine', function () {
   });
 
   it('displays "INSERT COINS" after returning the coins', function () {
-    vendingMachine.stockWithCoins([
+    vendingMachine.stockWithCoins(
       Nickel.create(),
       Nickel.create(),
       Dime.create()
-    ]);
+    );
 
-    vendingMachine.insertCoins([
+    vendingMachine.insertCoins(
       Nickel.create(),
       Dime.create(),
       Quarter.create()
-    ]);
+    );
 
     vendingMachine.pressButton('Return Coins');
     var displayText = vendingMachine.getDisplayText();
@@ -146,9 +146,9 @@ describe('The vending machine', function () {
   });
 
   it('displays "PRICE: $1.00" when the "Cola" button is pressed before $1.00 has been inserted', function () {
-    vendingMachine.insertCoins([
+    vendingMachine.insertCoins(
       Quarter.create()
-    ]);
+    );
 
     vendingMachine.pressButton('Cola');
     var displayText = vendingMachine.getDisplayText();
@@ -165,11 +165,11 @@ describe('The vending machine timer', function () {
   beforeEach(function (done) {
     vendingMachine = VendingMachine.create();
 
-    vendingMachine.insertCoins([
+    vendingMachine.insertCoins(
       Quarter.create(),
       Quarter.create(),
       Quarter.create()
-    ]);
+    );
 
     vendingMachine.pressButton('Cola');
 
@@ -193,12 +193,12 @@ describe('The vending machine', function () {
   });
 
   it('displays "SOLD OUT" when the selected product is out of stock', function () {
-    vendingMachine.insertCoins([
+    vendingMachine.insertCoins(
       Quarter.create(),
       Quarter.create(),
       Quarter.create(),
       Quarter.create()
-    ]);
+    );
 
     vendingMachine.pressButton('Cola');
     var displayText = vendingMachine.getDisplayText();
@@ -207,16 +207,16 @@ describe('The vending machine', function () {
   });
 
   it('dispenses cola when cola is purchased', function () {
-    vendingMachine.stockWithProducts([
+    vendingMachine.stockWithProducts(
       Cola.create()
-    ]);
+    );
 
-    vendingMachine.insertCoins([
+    vendingMachine.insertCoins(
       Quarter.create(),
       Quarter.create(),
       Quarter.create(),
       Quarter.create()
-    ]);
+    );
 
     vendingMachine.pressButton('Cola');
     var outputBinContents = vendingMachine.getOutputBinContents();
@@ -225,14 +225,14 @@ describe('The vending machine', function () {
   });
 
   it('dispenses chips when chips are purchased', function () {
-    vendingMachine.stockWithProducts([
+    vendingMachine.stockWithProducts(
       Chips.create()
-    ]);
+    );
 
-    vendingMachine.insertCoins([
+    vendingMachine.insertCoins(
       Quarter.create(),
       Quarter.create()
-    ]);
+    );
 
     vendingMachine.pressButton('Chips');
     var outputBinContents = vendingMachine.getOutputBinContents();
@@ -241,16 +241,16 @@ describe('The vending machine', function () {
   });
 
   it('dispenses candy when candy is purchased', function () {
-    vendingMachine.stockWithProducts([
+    vendingMachine.stockWithProducts(
       Candy.create()
-    ]);
+    );
 
-    vendingMachine.insertCoins([
+    vendingMachine.insertCoins(
       Quarter.create(),
       Quarter.create(),
       Dime.create(),
       Nickel.create()
-    ]);
+    );
 
     vendingMachine.pressButton('Candy');
     var outputBinContents = vendingMachine.getOutputBinContents();
@@ -259,16 +259,16 @@ describe('The vending machine', function () {
   });
 
   it('displays "THANK YOU" when an item is purchased', function () {
-    vendingMachine.stockWithProducts([
+    vendingMachine.stockWithProducts(
       Cola.create()
-    ]);
+    );
 
-    vendingMachine.insertCoins([
+    vendingMachine.insertCoins(
       Quarter.create(),
       Quarter.create(),
       Quarter.create(),
       Quarter.create()
-    ]);
+    );
 
     vendingMachine.pressButton('Cola');
     var displayText = vendingMachine.getDisplayText();
@@ -285,22 +285,22 @@ describe('The vending machine timer', function () {
   beforeEach(function (done) {
     vendingMachine = VendingMachine.create();
 
-    vendingMachine.stockWithCoins([
+    vendingMachine.stockWithCoins(
       Nickel.create(),
       Nickel.create(),
       Dime.create()
-    ]);
+    );
 
-    vendingMachine.stockWithProducts([
+    vendingMachine.stockWithProducts(
       Cola.create()
-    ]);
+    );
 
-    vendingMachine.insertCoins([
+    vendingMachine.insertCoins(
       Quarter.create(),
       Quarter.create(),
       Quarter.create(),
       Quarter.create()
-    ]);
+    );
 
     vendingMachine.pressButton('Cola');
 
@@ -324,19 +324,19 @@ describe('The vending machine', function () {
   });
 
   it('makes change when the amount inserted exceeds the cost of the product purchased', function () {
-    vendingMachine.stockWithCoins([
+    vendingMachine.stockWithCoins(
       Dime.create()
-    ]);
+    );
 
-    vendingMachine.stockWithProducts([
+    vendingMachine.stockWithProducts(
       Candy.create()
-    ]);
+    );
 
-    vendingMachine.insertCoins([
+    vendingMachine.insertCoins(
       Quarter.create(),
       Quarter.create(),
       Quarter.create()
-    ]);
+    );
 
     vendingMachine.pressButton('Candy');
     var coinReturnContents = vendingMachine.getCoinReturnContents();

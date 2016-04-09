@@ -31,8 +31,10 @@ function create() {
     return display.getText();
   }
 
-  function insertCoins(coins) {
-    coins.forEach(function (coin) {
+  function insertCoins() {
+    for (var i = 0; i < arguments.length; i += 1) {
+      var coin = arguments[i];
+
       if (coinIdentifier.coinIsNickel(coin)) {
         acceptCoin(coin);
       } else if (coinIdentifier.coinIsDime(coin)) {
@@ -42,7 +44,7 @@ function create() {
       } else {
         rejectCoin(coin);
       }
-    });
+    }
   }
 
   function acceptCoin(coin) {
@@ -192,8 +194,10 @@ function create() {
     }
   }
 
-  function stockWithCoins(coins) {
-    coins.forEach(function (coin) {
+  function stockWithCoins() {
+    for (var i = 0; i < arguments.length; i += 1) {
+      var coin = arguments[i];
+
       if (coinIdentifier.coinIsNickel(coin)) {
         nickelsOnHand.push(coin);
       } else if (coinIdentifier.coinIsDime(coin)) {
@@ -205,11 +209,13 @@ function create() {
       if (canMakeChange()) {
         display.setText('INSERT COINS');
       }
-    });
+    }
   }
 
-  function stockWithProducts(products) {
-    products.forEach(function (product) {
+  function stockWithProducts() {
+    for (var i = 0; i < arguments.length; i += 1) {
+      var product = arguments[i];
+
       if (product.getName() === 'Cola') {
         colaOnHand.push(product);
       } else if (product.getName() === 'Chips') {
@@ -217,7 +223,7 @@ function create() {
       } else if (product.getName() === 'Candy') {
         candyOnHand.push(product);
       }
-    });
+    }
   }
 
   return deepFreeze({
