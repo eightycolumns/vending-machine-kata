@@ -126,6 +126,25 @@ describe('The vending machine', function () {
     expect(coinReturnContents.containsQuarter()).toBe(true);
   });
 
+  it('displays "INSERT COINS" after returning the coins', function () {
+    vendingMachine.stockWithCoins([
+      Nickel.create(),
+      Nickel.create(),
+      Dime.create()
+    ]);
+
+    vendingMachine.insertCoins([
+      Nickel.create(),
+      Dime.create(),
+      Quarter.create()
+    ]);
+
+    vendingMachine.pressButton('Return Coins');
+    var displayText = vendingMachine.getDisplayText();
+
+    expect(displayText).toBe('INSERT COINS');
+  });
+
   it('displays the cost of the product when a button is pressed before enough money has been inserted', function () {
     vendingMachine.insertCoins([
       Quarter.create()

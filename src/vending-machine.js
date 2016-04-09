@@ -71,6 +71,20 @@ function create() {
     while (!coinsInserted.isEmpty()) {
       coinReturnContents.push(coinsInserted.pop());
     }
+
+    if (canMakeChange()) {
+      display.setText('INSERT COINS');
+    } else {
+      display.setText('EXACT CHANGE ONLY');
+    }
+  }
+
+  function canMakeChange() {
+    return (
+      (nickelsOnHand.getSize() > 3) ||
+      (nickelsOnHand.getSize() > 1 && dimesOnHand.getSize() > 0) ||
+      (nickelsOnHand.getSize() > 0 && dimesOnHand.getSize() > 1)
+    );
   }
 
   function pressProductButton(productName) {
@@ -178,14 +192,6 @@ function create() {
         display.setText('INSERT COINS');
       }
     });
-  }
-
-  function canMakeChange() {
-    return (
-      (nickelsOnHand.getSize() > 3) ||
-      (nickelsOnHand.getSize() > 1 && dimesOnHand.getSize() > 0) ||
-      (nickelsOnHand.getSize() > 0 && dimesOnHand.getSize() > 1)
-    );
   }
 
   function stockWithProducts(products) {
