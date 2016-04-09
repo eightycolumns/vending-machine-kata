@@ -191,6 +191,10 @@ function create() {
     }
   }
 
+  function setProductPriceInCents(productName, productPriceInCents) {
+    productPricer.setProductPriceInCents(productName, productPriceInCents);
+  }
+
   function stockWithCoins() {
     for (var i = 0; i < arguments.length; i += 1) {
       var coin = arguments[i];
@@ -229,6 +233,7 @@ function create() {
     getDisplayText: getDisplayText,
     insertCoins: insertCoins,
     pressButton: pressButton,
+    setProductPriceInCents: setProductPriceInCents,
     stockWithCoins: stockWithCoins,
     stockWithProducts: stockWithProducts
   });

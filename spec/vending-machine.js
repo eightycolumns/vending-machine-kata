@@ -3,6 +3,7 @@ describe('The vending machine', function () {
 
   beforeEach(function () {
     vendingMachine = VendingMachine.create();
+    vendingMachine.setProductPriceInCents('Cola', 100);
   });
 
   it('displays "INSERT COINS" when no coins have been inserted', function () {
@@ -162,6 +163,7 @@ describe('The vending machine timer', function () {
 
   beforeEach(function (done) {
     vendingMachine = VendingMachine.create();
+    vendingMachine.setProductPriceInCents('Cola', 100);
 
     vendingMachine.insertCoins(
       Quarter.create(),
@@ -320,6 +322,7 @@ describe('The vending machine', function () {
 
   beforeEach(function () {
     vendingMachine = VendingMachine.create();
+    vendingMachine.setProductPriceInCents('Candy', 65);
   });
 
   it('makes change when the amount inserted exceeds the cost of the product purchased', function () {
@@ -428,6 +431,10 @@ describe('Coins', function () {
 
 describe('Products', function () {
   var productPricer = ProductPricer.create();
+
+  productPricer.setProductPriceInCents('Cola', 100);
+  productPricer.setProductPriceInCents('Chips', 50);
+  productPricer.setProductPriceInCents('Candy', 65);
 
   describe('Cola', function () {
     var colaPriceInCents = productPricer.getProductPriceInCents('Cola');
