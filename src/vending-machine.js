@@ -3,7 +3,7 @@ var VendingMachine = (function () {
 function create() {
   var coinIdentifier = CoinIdentifier.create();
 
-  var display = Display.create('INSERT COINS');
+  var display = Display.create('EXACT CHANGE ONLY');
 
   var coinsInserted = CoinCollection.create();
   var coinReturnContents = CoinCollection.create();
@@ -173,7 +173,19 @@ function create() {
       } else if (coinIdentifier.coinIsQuarter(coin)) {
         quartersOnHand.push(coin);
       }
+
+      if (canMakeChange()) {
+        display.setText('INSERT COINS');
+      }
     });
+  }
+
+  function canMakeChange() {
+    return (
+      (nickelsOnHand.getSize() > 3) ||
+      (nickelsOnHand.getSize() > 1 && dimesOnHand.getSize() > 0) ||
+      (nickelsOnHand.getSize() > 0 && dimesOnHand.getSize() > 1)
+    );
   }
 
   function stockWithProducts(products) {

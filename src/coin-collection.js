@@ -29,6 +29,10 @@ function create() {
     });
   }
 
+  function getSize() {
+    return contents.length;
+  }
+
   function getTotalValueInCents() {
     coinValuesInCents = {
       penny: 1,
@@ -71,6 +75,7 @@ function create() {
     containsNickel: containsNickel,
     containsPenny: containsPenny,
     containsQuarter: containsQuarter,
+    getSize: getSize,
     getTotalValueInCents: getTotalValueInCents,
     isEmpty: isEmpty,
     pop: pop,

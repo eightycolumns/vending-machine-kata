@@ -6,9 +6,21 @@ describe('The vending machine', function () {
   });
 
   it('displays "INSERT COINS" when no coins have been inserted', function () {
+    vendingMachine.stockWithCoins([
+      Nickel.create(),
+      Nickel.create(),
+      Dime.create()
+    ]);
+
     var displayText = vendingMachine.getDisplayText();
 
     expect(displayText).toBe('INSERT COINS');
+  });
+
+  it('displays "EXACT CHANGE ONLY" when unable to make change', function () {
+    var displayText = vendingMachine.getDisplayText();
+
+    expect(displayText).toBe('EXACT CHANGE ONLY');
   });
 
   it('accepts nickels', function () {
