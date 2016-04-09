@@ -1,9 +1,6 @@
 var VendingMachine = (function () {
 
 function create() {
-  var coinIdentifier = CoinIdentifier.create();
-  var coinValuator = CoinValuator.create();
-
   var display = Display.create('EXACT CHANGE ONLY');
   var timer = Timer.create();
 
@@ -14,11 +11,16 @@ function create() {
   var nickelsOnHand = CoinCollection.create();
   var quartersOnHand = CoinCollection.create();
 
+  var coinIdentifier = CoinIdentifier.create();
+  var coinValuator = CoinValuator.create();
+
   var outputBinContents = ProductCollection.create();
 
   var colaOnHand = ProductCollection.create();
   var chipsOnHand = ProductCollection.create();
   var candyOnHand = ProductCollection.create();
+
+  var productPricer = ProductPricer.create();
 
   function getCoinReturnContents() {
     return coinReturnContents;
@@ -93,10 +95,10 @@ function create() {
 
   function pressProductButton(productName) {
     var centsInserted = coinsInserted.getTotalValueInCents();
-    var productCostInCents = getProductCostInCents(productName);
+    var productPriceInCents = productPricer.getProductPriceInCents(productName);
 
-    if (centsInserted < productCostInCents) {
-      var displayText = 'PRICE: ' + formatCentsForDisplay(productCostInCents);
+    if (centsInserted < productPriceInCents) {
+      var displayText = 'PRICE: ' + formatCentsForDisplay(productPriceInCents);
       display.setText(displayText);
 
       timer.wait(5000, function () {
@@ -107,16 +109,6 @@ function create() {
       display.setText('SOLD OUT');
     } else {
       sellProduct(productName);
-    }
-  }
-
-  function getProductCostInCents(productName) {
-    if (productName === 'Cola') {
-      return 100;
-    } else if (productName === 'Chips') {
-      return 50;
-    } else if (productName === 'Candy') {
-      return 65;
     }
   }
 
@@ -132,11 +124,11 @@ function create() {
 
   function sellProduct(productName) {
     var centsInserted = coinsInserted.getTotalValueInCents();
-    var productCostInCents = getProductCostInCents(productName);
+    var productPriceInCents = productPricer.getProductPriceInCents(productName);
 
     moveCoinsInsertedToCoinsOnHand();
     dispenseProduct(productName);
-    makeChange(centsInserted, productCostInCents);
+    makeChange(centsInserted, productPriceInCents);
     display.setText('THANK YOU');
 
     timer.wait(5000, function () {
@@ -172,8 +164,8 @@ function create() {
     }
   }
 
-  function makeChange(centsInserted, productCostInCents) {
-    var changeDueInCents = centsInserted - productCostInCents;
+  function makeChange(centsInserted, productPriceInCents) {
+    var changeDueInCents = centsInserted - productPriceInCents;
 
     var coinValuator = CoinValuator.create();
 

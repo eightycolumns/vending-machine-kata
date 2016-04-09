@@ -2,9 +2,8 @@ var Cola = (function () {
 
 function create() {
   var name = 'Cola';
-  var costInCents = 100;
 
-  return Product.create(name, costInCents);
+  return Product.create(name);
 }
 
 return deepFreeze({

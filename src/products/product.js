@@ -6,13 +6,8 @@ function create(name, costInCents) {
     return name;
   }
 
-  function getCostInCents() {
-    return costInCents;
-  }
-
   return deepFreeze({
-    getName: getName,
-    getCostInCents: getCostInCents
+    getName: getName
   });
 }
 
