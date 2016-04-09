@@ -2,6 +2,7 @@ var VendingMachine = (function () {
 
 function create() {
   var coinIdentifier = CoinIdentifier.create();
+  var coinValuator = CoinValuator.create();
 
   var display = Display.create('EXACT CHANGE ONLY');
   var timer = Timer.create();
@@ -174,22 +175,26 @@ function create() {
   function makeChange(centsInserted, productCostInCents) {
     var changeDueInCents = centsInserted - productCostInCents;
 
-    coinValuesInCents = {
-      nickel: 5,
-      dime: 10,
-      quarter: 25
-    };
+    var coinValuator = CoinValuator.create();
+
+    var nickel = Nickel.create();
+    var dime = Dime.create();
+    var quarter = Quarter.create();
+
+    var valueOfNickelInCents = coinValuator.getValueOfCoinInCents(nickel);
+    var valueOfDimeInCents = coinValuator.getValueOfCoinInCents(dime);
+    var valueOfQuarterInCents = coinValuator.getValueOfCoinInCents(quarter);
 
     while (changeDueInCents > 0) {
-      if (changeDueInCents >= coinValuesInCents.quarter) {
+      if (changeDueInCents >= valueOfQuarterInCents) {
         coinReturnContents.push(quartersOnHand.pop());
-        changeDueInCents -= coinValuesInCents.quarter;
-      } else if (changeDueInCents >= coinValuesInCents.dime) {
+        changeDueInCents -= valueOfQuarterInCents;
+      } else if (changeDueInCents >= valueOfDimeInCents) {
         coinReturnContents.push(dimesOnHand.pop());
-        changeDueInCents -= coinValuesInCents.dime;
-      } else if (changeDueInCents >= coinValuesInCents.nickel) {
+        changeDueInCents -= valueOfDimeInCents;
+      } else if (changeDueInCents >= valueOfNickelInCents) {
         coinReturnContents.push(nickelsOnHand.pop());
-        changeDueInCents -= coinValuesInCents.nickel;
+        changeDueInCents -= valueOfNickelInCents;
       }
     }
   }
