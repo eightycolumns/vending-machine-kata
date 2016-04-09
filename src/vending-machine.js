@@ -129,6 +129,14 @@ function create() {
     dispenseProduct(productName);
     makeChange(centsInserted, productCostInCents);
     display.setText('THANK YOU');
+
+    setTimeout(function () {
+      if (canMakeChange()) {
+        display.setText('INSERT COINS');
+      } else {
+        display.setText('EXACT CHANGE ONLY');
+      }
+    }, 5000);
   }
 
   function moveCoinsInsertedToCoinsOnHand() {

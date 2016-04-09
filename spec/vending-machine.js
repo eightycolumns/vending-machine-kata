@@ -262,6 +262,45 @@ describe('The vending machine', function () {
   });
 });
 
+describe('The vending machine timer', function () {
+  jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+
+  var vendingMachine = undefined;
+
+  beforeEach(function (done) {
+    vendingMachine = VendingMachine.create();
+
+    vendingMachine.stockWithCoins([
+      Nickel.create(),
+      Nickel.create(),
+      Dime.create()
+    ]);
+
+    vendingMachine.stockWithProducts([
+      Cola.create()
+    ]);
+
+    vendingMachine.insertCoins([
+      Quarter.create(),
+      Quarter.create(),
+      Quarter.create(),
+      Quarter.create()
+    ]);
+
+    vendingMachine.pressButton('Cola');
+
+    setTimeout(function () {
+      done();
+    }, 5000);
+  });
+
+  it('changes "THANK YOU" back to "INSERT COINS" after five seconds', function () {
+    var displayText = vendingMachine.getDisplayText();
+
+    expect(displayText).toBe('INSERT COINS');
+  });
+});
+
 describe('Coins', function () {
   describe('Pennies', function () {
     var penny = Penny.create();
