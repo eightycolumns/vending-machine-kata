@@ -3,34 +3,30 @@ var CoinCollection = (function () {
 function create() {
   var coinIdentifier = CoinIdentifier.create();
 
-  var contents = [];
+  var collection = Collection.create();
 
   function containsDime() {
-    return contents.some(function (coin) {
+    return collection.getContents().some(function (coin) {
       return coinIdentifier.coinIsDime(coin);
     });
   }
 
   function containsNickel() {
-    return contents.some(function (coin) {
+    return collection.getContents().some(function (coin) {
       return coinIdentifier.coinIsNickel(coin);
     });
   }
 
   function containsPenny() {
-    return contents.some(function (coin) {
+    return collection.getContents().some(function (coin) {
       return coinIdentifier.coinIsPenny(coin);
     });
   }
 
   function containsQuarter() {
-    return contents.some(function (coin) {
+    return collection.getContents().some(function (coin) {
       return coinIdentifier.coinIsQuarter(coin);
     });
-  }
-
-  function getSize() {
-    return contents.length;
   }
 
   function getTotalValueInCents() {
@@ -43,7 +39,7 @@ function create() {
 
     var totalValueInCents = 0;
 
-    contents.forEach(function (coin) {
+    collection.getContents().forEach(function (coin) {
       if (coinIdentifier.coinIsPenny(coin)) {
         totalValueInCents += coinValuesInCents.penny;
       } else if (coinIdentifier.coinIsNickel(coin)) {
@@ -58,28 +54,16 @@ function create() {
     return totalValueInCents;
   }
 
-  function isEmpty() {
-    return contents.length === 0;
-  }
-
-  function pop() {
-    return contents.pop();
-  }
-
-  function push(coin) {
-    contents.push(coin);
-  }
-
   return deepFreeze({
     containsDime: containsDime,
     containsNickel: containsNickel,
     containsPenny: containsPenny,
     containsQuarter: containsQuarter,
-    getSize: getSize,
+    getSize: collection.getSize,
     getTotalValueInCents: getTotalValueInCents,
-    isEmpty: isEmpty,
-    pop: pop,
-    push: push
+    isEmpty: collection.isEmpty,
+    pop: collection.pop,
+    push: collection.push
   });
 }
 
