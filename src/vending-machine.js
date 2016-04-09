@@ -4,6 +4,7 @@ function create() {
   var coinIdentifier = CoinIdentifier.create();
 
   var display = Display.create('EXACT CHANGE ONLY');
+  var timer = Timer.create();
 
   var coinsInserted = CoinCollection.create();
   var coinReturnContents = CoinCollection.create();
@@ -130,13 +131,13 @@ function create() {
     makeChange(centsInserted, productCostInCents);
     display.setText('THANK YOU');
 
-    setTimeout(function () {
+    timer.wait(5000, function () {
       if (canMakeChange()) {
         display.setText('INSERT COINS');
       } else {
         display.setText('EXACT CHANGE ONLY');
       }
-    }, 5000);
+    });
   }
 
   function moveCoinsInsertedToCoinsOnHand() {
