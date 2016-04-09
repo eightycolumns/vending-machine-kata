@@ -145,7 +145,7 @@ describe('The vending machine', function () {
     expect(displayText).toBe('INSERT COINS');
   });
 
-  it('displays the cost of the product when a button is pressed before enough money has been inserted', function () {
+  it('displays "PRICE: $1.00" when the "Cola" button is pressed before $1.00 has been inserted', function () {
     vendingMachine.insertCoins([
       Quarter.create()
     ]);
@@ -154,6 +154,42 @@ describe('The vending machine', function () {
     var displayText = vendingMachine.getDisplayText();
 
     expect(displayText).toBe('PRICE: $1.00');
+  });
+});
+
+describe('The vending machine timer', function () {
+  jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+
+  var vendingMachine = undefined;
+
+  beforeEach(function (done) {
+    vendingMachine = VendingMachine.create();
+
+    vendingMachine.insertCoins([
+      Quarter.create(),
+      Quarter.create(),
+      Quarter.create()
+    ]);
+
+    vendingMachine.pressButton('Cola');
+
+    setTimeout(function () {
+      done();
+    }, 5000);
+  });
+
+  it('changes "PRICE: $1.00" back to the total amount inserted after five seconds', function () {
+    var displayText = vendingMachine.getDisplayText();
+
+    expect(displayText).toBe('$0.75');
+  });
+});
+
+describe('The vending machine', function () {
+  var vendingMachine = undefined;
+
+  beforeEach(function () {
+    vendingMachine = VendingMachine.create();
   });
 
   it('displays "SOLD OUT" when the selected product is out of stock', function () {
@@ -239,27 +275,6 @@ describe('The vending machine', function () {
 
     expect(displayText).toBe('THANK YOU');
   });
-
-  it('makes change when the amount inserted exceeds the cost of the product purchased', function () {
-    vendingMachine.stockWithCoins([
-      Dime.create()
-    ]);
-
-    vendingMachine.stockWithProducts([
-      Candy.create()
-    ]);
-
-    vendingMachine.insertCoins([
-      Quarter.create(),
-      Quarter.create(),
-      Quarter.create()
-    ]);
-
-    vendingMachine.pressButton('Candy');
-    var coinReturnContents = vendingMachine.getCoinReturnContents();
-
-    expect(coinReturnContents.containsDime()).toBe(true);
-  });
 });
 
 describe('The vending machine timer', function () {
@@ -298,6 +313,35 @@ describe('The vending machine timer', function () {
     var displayText = vendingMachine.getDisplayText();
 
     expect(displayText).toBe('INSERT COINS');
+  });
+});
+
+describe('The vending machine', function () {
+  var vendingMachine = undefined;
+
+  beforeEach(function () {
+    vendingMachine = VendingMachine.create();
+  });
+
+  it('makes change when the amount inserted exceeds the cost of the product purchased', function () {
+    vendingMachine.stockWithCoins([
+      Dime.create()
+    ]);
+
+    vendingMachine.stockWithProducts([
+      Candy.create()
+    ]);
+
+    vendingMachine.insertCoins([
+      Quarter.create(),
+      Quarter.create(),
+      Quarter.create()
+    ]);
+
+    vendingMachine.pressButton('Candy');
+    var coinReturnContents = vendingMachine.getCoinReturnContents();
+
+    expect(coinReturnContents.containsDime()).toBe(true);
   });
 });
 

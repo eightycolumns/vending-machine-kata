@@ -95,6 +95,11 @@ function create() {
     if (centsInserted < productCostInCents) {
       var displayText = 'PRICE: ' + formatCentsForDisplay(productCostInCents);
       display.setText(displayText);
+
+      timer.wait(5000, function () {
+        var displayText = formatCentsForDisplay(centsInserted);
+        display.setText(displayText);
+      });
     } else if (productIsSoldOut(productName)) {
       display.setText('SOLD OUT');
     } else {
