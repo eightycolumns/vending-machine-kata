@@ -2,6 +2,7 @@ var CoinCollection = (function () {
 
 function create() {
   var coinIdentifier = CoinIdentifier.create();
+  var coinValuator = CoinValuator.create();
 
   var collection = Collection.create();
 
@@ -30,24 +31,27 @@ function create() {
   }
 
   function getTotalValueInCents() {
-    coinValuesInCents = {
-      penny: 1,
-      nickel: 5,
-      dime: 10,
-      quarter: 25
-    };
+    var penny = Penny.create();
+    var nickel = Nickel.create();
+    var dime = Dime.create();
+    var quarter = Quarter.create();
+
+    var valueOfPennyInCents = coinValuator.getValueOfCoinInCents(penny);
+    var valueOfNickelInCents = coinValuator.getValueOfCoinInCents(nickel);
+    var valueOfDimeInCents = coinValuator.getValueOfCoinInCents(dime);
+    var valueOfQuarterInCents = coinValuator.getValueOfCoinInCents(quarter);
 
     var totalValueInCents = 0;
 
     collection.getContents().forEach(function (coin) {
       if (coinIdentifier.coinIsPenny(coin)) {
-        totalValueInCents += coinValuesInCents.penny;
+        totalValueInCents += valueOfPennyInCents;
       } else if (coinIdentifier.coinIsNickel(coin)) {
-        totalValueInCents += coinValuesInCents.nickel;
+        totalValueInCents += valueOfNickelInCents;
       } else if (coinIdentifier.coinIsDime(coin)) {
-        totalValueInCents += coinValuesInCents.dime;
+        totalValueInCents += valueOfDimeInCents;
       } else if (coinIdentifier.coinIsQuarter(coin)) {
-        totalValueInCents += coinValuesInCents.quarter;
+        totalValueInCents += valueOfQuarterInCents;
       }
     });
 
